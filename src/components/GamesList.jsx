@@ -8,7 +8,7 @@ import chelseaLogo from '../assets/team-logo/chelsea-logo.png';
 
 
 // GamesList component for the games list. We make api call here and pass the data to the Game component. Create row for each game.
-function GamesList() {
+function GamesList({ onGameItemClick }) {
 
     //Example api call. Make api call here.
     const games = [
@@ -32,8 +32,8 @@ function GamesList() {
   return (
     <>
         {games.map(game => (
-        <div className='row'>
-            <GameItem key={game.id} game={game} />
+        <div className='row' key={game.id} onClick={() => onGameItemClick(game)}>
+            <GameItem game={game} />
         </div>
         ))}
     </>
