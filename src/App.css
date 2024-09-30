@@ -2,7 +2,7 @@
 .container {
   display: flex;
   height: calc(100vh - 150px);
-  margin-top: 150px;
+  max-width: 100%;
 }
 
 /* Container left for the games list */
@@ -11,19 +11,14 @@
   display: flex;
   flex-direction: column;
   padding: 32px; /* Changed from 2rem to 32px */
+  margin-top: 100px;
 }
 
 /* Container right for the hero and bet builder */
 .container-right {
   width: 50vw;
   display: flex;
-  padding-right: 20px;
-  justify-content: center;
-}
-
-/* Row styling for the games in games list */
-.row {
-  display: flex;
-  margin-bottom: 20px;
-  width: 100%;
+  padding: 32px;
+  justify-content: left;
+  margin-top: 100px;
 }

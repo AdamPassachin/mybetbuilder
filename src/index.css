@@ -25,6 +25,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: hidden;
   background-color: rgba(33, 33, 33, 1);
 }
 

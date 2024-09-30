@@ -1,4 +1,4 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
 
 /* Navbar styles for position */
 .navbar {
@@ -24,6 +24,7 @@
 .navbar-logo {
     font-size: 28px;
     color: rgba(207,207,207,1);
+    font-family: 'Bangers', system-ui;
     letter-spacing: 2px;
     margin-right: 32px; 
     cursor: default;
