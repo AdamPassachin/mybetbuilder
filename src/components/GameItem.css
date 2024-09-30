@@ -42,11 +42,18 @@
     flex-direction: row;
     width: 70%;
     margin-bottom: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 /* Row hover styling */
 .row:hover {
     background-color: rgb(57, 55, 57);
+}
+
+/* Row active/pressed styling */
+.row:active {
+    background-color: rgb(57, 55, 57);
+    transform: scale(0.95);
 }
 
 /* Team info styling */
