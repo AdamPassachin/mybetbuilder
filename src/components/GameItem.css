@@ -1,0 +1,55 @@
+/* GameItem component styling */        
+.game-item {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+}
+
+/* Game time styling */
+.game-time {
+    display: flex;
+    margin-right: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Vertical line styling */
+.vertical-line {
+    background-color: rgba(202, 196, 208);
+    height: 100%;
+    width: 1px;
+    margin-right: 10px;
+}
+
+/* Teams container styling */
+.teams-container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Team logo styling */
+.team-logo {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* Row styling for the parent contaner holding the game items */
+.row{
+    display: flex;
+    flex-direction: row;
+    width: 70%;
+    margin-bottom: 10px;
+}
+
+/* Row hover styling */
+.row:hover {
+    background-color: rgb(57, 55, 57);
+}
+
+/* Team info styling */
+.team-info {
+    display: flex;
+    align-items: center;
+}

@@ -1,7 +1,7 @@
 import React from 'react';
-import './Navbar.css';  // Add this import
+import './Navbar.css'; 
 
-
+// Navbar component for the navigation bar
 function Navbar() {
   return (
     <nav className="navbar">

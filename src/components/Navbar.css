@@ -1,38 +1,42 @@
-@import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
 
+
+/* Navbar styles for position */
 .navbar {
     background-color: rgba(33,33,33,0.8);
-    font-family: 'Bangers', monospace;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1000;
-    padding: 0.5rem 0;
+    padding: 8px 0; /* Changed from 0.5rem to 8px */
 }
 
+/* Navbar container */
 .navbar-container {
     display: flex;
     align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
+    max-width: 100%; 
+    margin: 0;
+    padding: 0 32px; 
 }
 
+/* Navbar logo */
 .navbar-logo {
-    font-size: 48px;
+    font-size: 28px;
     color: rgba(207,207,207,1);
     letter-spacing: 2px;
-    margin-right: 2rem;
+    margin-right: 32px; 
     cursor: default;
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
+/* Navbar logo hover effect */
 .navbar-logo:hover {
     color: #ffffff;
     text-shadow: 0 0 10px rgba(255,255,255,0.5);
 }
 
+/* Navbar menu */
 .nav-menu {
     display: flex;
     list-style-type: none;
@@ -40,17 +44,20 @@
     padding: 0;
 }
 
+/* Navbar menu items */
 .nav-item {
-    margin-left: 2rem;
+    margin-left: 32px; /* Changed from 2rem to 32px */
 }
 
+/* Navbar menu links */
 .nav-link {
     color: rgba(207,207,207,1);
     text-decoration: none;
-    font-size: 1.2rem;
+    font-size: 12px; /* Changed from 1.2rem to 19px (assuming default font size of 16px) */
     letter-spacing: 1.5px;
 }
 
+/* Navbar menu item hover effect */
 .nav-link:hover {
     color: #555555;
 }
