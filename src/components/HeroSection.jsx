@@ -2,7 +2,7 @@ import './HeroSection.css'
 
 function HeroSection() {
     return (
-        <div className="hero-section">
+        <div>
             <h1 className="hero-title">
                 <span className="text-faded">Compare odds across</span><br />
                 <span className="text-faded">the board,</span> <span className="text-highlighted">bet smarter</span>
