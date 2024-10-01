@@ -1,8 +1,7 @@
-function Bookmakers (){
+function Bookmakers ({ bookmaker }) {
     return(
         <>
-            fefe
-            efe
+            <img src={bookmaker.logo} alt={bookmaker.name} />
         </>
     );
 }
