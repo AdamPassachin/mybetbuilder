@@ -1,38 +1,38 @@
 import React from 'react';
 import GameItem from './GameItem';
 import './GameItem.css';
-import liverpoolLogo from '../assets/team-logo/liverpool-logo.svg';
-import manchesterUnitedLogo from '../assets/team-logo/manchester-united-logo.svg';
-import fulhamLogo from '../assets/team-logo/fulham-logo.png';
-import chelseaLogo from '../assets/team-logo/chelsea-logo.png';
+import { useState, useEffect } from 'react';
 
 
 // GamesList component for the games list. We make api call here and pass the data to the Game component. Create row for each game.
-function GamesList({ onGameItemClick }) {
+function GamesList({ onGameItemClick, currentGameweek}) {
 
-    //Example api call. TO-DO: Make api call here to fetch PL games
-    const games = [
-    { 
-        id: 1, 
-        homeTeam: { name: 'Liverpool', logo: liverpoolLogo },
-        awayTeam: { name: 'Manchester United', logo: manchesterUnitedLogo },
-        date: '2023-04-15',
-        time: '15:00',
-    },
-    { 
-        id: 2, 
-        homeTeam: { name: 'Fulham', logo: fulhamLogo },
-        awayTeam: { name: 'Chelsea', logo: chelseaLogo },
-        date: '2023-04-16',
-        time: '17:30',
-      },
-    ];
+    const [currentGames, setCurrentGames] = useState([]);
+
+    useEffect(() => {
+        // Update the URL to match your backend API structure
+        fetch(`http://localhost:3000/games?gameweek=${currentGameweek}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            setCurrentGames(data.response);
+            console.log(data.response);
+          })
+          .catch(error => {
+            console.error('Error fetching games:', error);
+          });
+      }, [currentGameweek]);
+    
 
     // Render the games list - create a row for each game and pass the game data to the GameItem component.
   return (
     <>
-        {games.map(game => (
-        <div className='row' key={game.id} onClick={() => onGameItemClick(game)}>
+        {currentGames.map(game => (
+        <div className='row' key={game.fixture.id} onClick={() => onGameItemClick(game)}>
             <GameItem game={game} />
         </div>
         ))}

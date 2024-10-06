@@ -4,7 +4,7 @@ import './GameItem.css';
 function GameItem({ game }) {
     return (
         <div className="game-item">
-            <div className="game-time">{game.time}</div>
+            <div className="game-time">{game.timezone}</div>
             <div className="vertical-line"></div>
             <div className="teams-container">
                 <div className="team-info">
