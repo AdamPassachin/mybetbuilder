@@ -10,7 +10,7 @@ import chelseaLogo from '../assets/team-logo/chelsea-logo.png';
 // GamesList component for the games list. We make api call here and pass the data to the Game component. Create row for each game.
 function GamesList({ onGameItemClick }) {
 
-    //Example api call. Make api call here.
+    //Example api call. TO-DO: Make api call here to fetch PL games
     const games = [
     { 
         id: 1, 

@@ -10,7 +10,7 @@ import betwayLogo from '../assets/bookmaker-logo/betway.png';
 
 function BetBuilder({ game }) {
 
-    // Example bookmakers data. Make api call here.
+    // Example bookmakers data. TO-DO: Make api call here depending on game selected.
     const bookmakers = [
         { 
             id: 1, 
@@ -59,6 +59,9 @@ function BetBuilder({ game }) {
         },
         ];
 
+        // Renders the betbuilder component. Loops through the bookmakers array and renders a bookmaker component for each bookmaker.
+        // Renders a player card component for each player in the bookmakers array.
+        // TO-DO: Fix rendering of players cards. Right now player name is static. Issue when more players are available.
     return (
         <div>
             <h1 className='game-header-style'>{game.homeTeam.name} vs {game.awayTeam.name}</h1>

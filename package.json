@@ -7,11 +7,19 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "node server/server.js"
   },
   "dependencies": {
+    "@fastify/cors": "^10.0.1",
+    "clsx": "^2.1.1",
+    "dotenv": "^16.4.5",
+    "fastify": "^5.0.0",
+    "fastify-cli": "^7.0.1",
+    "framer-motion": "^11.11.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^2.5.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

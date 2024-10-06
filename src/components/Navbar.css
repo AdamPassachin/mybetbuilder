@@ -22,7 +22,7 @@
 
 /* Navbar logo */
 .navbar-logo {
-    font-size: 28px;
+    font-size: 36px;
     color: rgba(207,207,207,1);
     font-family: 'Bangers', system-ui;
     letter-spacing: 2px;
@@ -54,7 +54,7 @@
 .nav-link {
     color: rgba(207,207,207,1);
     text-decoration: none;
-    font-size: 12px; /* Changed from 1.2rem to 19px (assuming default font size of 16px) */
+    font-size: 16px; /* Changed from 1.2rem to 19px (assuming default font size of 16px) */
     letter-spacing: 1.5px;
 }
 

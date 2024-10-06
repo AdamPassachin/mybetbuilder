@@ -20,3 +20,9 @@
     font-size: 14px;
     margin: 5px;
 }
+
+.games-list-header {
+    position: absolute;
+    left: 465px;
+    top: 180px;
+}

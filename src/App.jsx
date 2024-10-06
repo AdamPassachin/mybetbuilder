@@ -6,6 +6,7 @@ import GamesListHeader from './components/GamesListHeader'
 import HeroSection from './components/HeroSection'
 import BetBuilder from './components/BetBuilder'
 
+
 function App() {
 
   // State to control the visibility of the hero section
@@ -18,6 +19,7 @@ function App() {
   function handleShowHeroSection(game) {
     setShowHeroSection(false);
     setSelectedGame(game);
+
   }
 
   return (
