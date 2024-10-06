@@ -20,7 +20,7 @@ fastify.register(cors, {
 fastify.get('/gameweek', async (request, reply) => {
     const response = await fetch('https://api-football-v1.p.rapidapi.com/v3/fixtures/rounds?league=39&season=2024&current=true', {
         headers: {
-            'x-rapidapi-key': 'process.env.RAPIDAPI_KEY'
+            'x-rapidapi-key': process.env.RAPIDAPI_KEY
         }
     });
 
