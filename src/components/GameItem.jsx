@@ -2,18 +2,28 @@ import './GameItem.css';
 
 // GameItem component for displaying a single game item
 function GameItem({ game }) {
+
+    // Convert the date to a more readable format
+    function convertTime(fullDate) {
+        const date = new Date(fullDate);
+        const hours = date.getUTCHours().toString().padStart(2, '0');
+        const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
+    }
+
+    // Render the game item, filled with game data from API
     return (
         <div className="game-item">
-            <div className="game-time">{game.timezone}</div>
+            <div className="game-time">{convertTime(game.fixture.date)}</div>
             <div className="vertical-line"></div>
             <div className="teams-container">
                 <div className="team-info">
-                    <img src={game.homeTeam.logo} alt={game.homeTeam.name} className="team-logo" />
-                    <span>{game.homeTeam.name}</span>
+                    <img src={game.teams.home.logo} alt={game.teams.home.name} className="team-logo" />
+                    <span>{game.teams.home.name}</span>
                 </div>
                 <div className="team-info">
-                    <img src={game.awayTeam.logo} alt={game.awayTeam.name} className="team-logo" />
-                    <span>{game.awayTeam.name}</span>
+                    <img src={game.teams.away.logo} alt={game.teams.away.name} className="team-logo" />
+                    <span>{game.teams.away.name}</span>
                 </div>
             </div>
         </div>

@@ -20,7 +20,7 @@ function App() {
 
   // Fetch current gameweek from backend
   useEffect(() => {
-    fetch('http://localhost:3000/gameweek') 
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/gameweek`) 
       .then(response =>{
         if(!response.ok){
           throw new Error('Failed to fetch current gameweek');
