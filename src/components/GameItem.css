@@ -1,17 +1,21 @@
-
 /* GameItem component styling */        
 .game-item {
     display: flex;
-    flex-direction: row;
-    padding: 10px;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    cursor: pointer;
 }
 
 /* Game time styling */
 .game-time {
     display: flex;
-    margin-right: 10px;
+    padding: 8px;
     align-items: center;
     justify-content: center;
+    height: 40px;
+    width: 40px;
+
 }
 
 /* Vertical line styling */
@@ -26,6 +30,7 @@
 .teams-container {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
 }
 
 /* Team logo styling */
@@ -51,7 +56,7 @@
 }
 
 /* Row active/pressed styling */
-.row:active {
+.row:active {   
     background-color: rgb(57, 55, 57);
     transform: scale(0.95);
 }
@@ -61,3 +66,22 @@
     display: flex;
     align-items: center;
 }
+
+/* Button styling */
+.game-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-icon {
+    width: 24px;  /* Adjust this value to match your image size */
+    height: 24px; /* Adjust this value to match your image size */
+    opacity: 0.6;
+}
+
+

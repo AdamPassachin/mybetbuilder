@@ -1,4 +1,5 @@
 import './GameItem.css';
+import arrowForward from '../assets/icons/arrow-forward.svg';
 
 // GameItem component for displaying a single game item
 function GameItem({ game }) {
@@ -26,6 +27,9 @@ function GameItem({ game }) {
                     <span>{game.teams.away.name}</span>
                 </div>
             </div>
+            <button className="game-button">
+                <img src={arrowForward} alt="Details" className="button-icon" />
+            </button>
         </div>
     );
 }
