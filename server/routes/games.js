@@ -10,7 +10,7 @@ export default async function gamesRoutes(fastify, opts) {
             const response = await fetch('https://api-football-v1.p.rapidapi.com/v3/fixtures/rounds?league=39&season=2024&current=true', {
                 headers: {
                     'x-rapidapi-key': process.env.RAPIDAPI_KEY,
-                    'x-rapidapi-host': 'api-football-v1.p.rapidapi.com'
+                    'x-rapidapi-host': process.env.RAPIDAPI_HOST
                 }
             });
 
@@ -37,7 +37,7 @@ export default async function gamesRoutes(fastify, opts) {
             const response = await fetch(`https://api-football-v1.p.rapidapi.com/v3/fixtures?league=39&season=2024&round=Regular%20Season%20-%20${gameweek}`, {
                 headers: {
                     'x-rapidapi-key': process.env.RAPIDAPI_KEY,
-                    'x-rapidapi-host': 'api-football-v1.p.rapidapi.com'
+                    'x-rapidapi-host': process.env.RAPIDAPI_HOST
                 }
             });
 

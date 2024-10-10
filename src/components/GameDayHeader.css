@@ -1,0 +1,21 @@
+/* GameDayHeader component styling */
+.game-day-header {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+
+/* Divider styling for the leauge header */
+.game-day-divider {
+    height: 2px;
+    width: 100%;
+    opacity: 0.5;
+    background-color: rgba(202, 196, 208);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+}
+

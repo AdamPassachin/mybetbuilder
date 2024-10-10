@@ -5,6 +5,25 @@
     justify-content: space-between;
     width: 100%;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.game-score{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    flex-direction: column;
+    margin-right: 15px;
+    margin-left: 5px;
+}
+
+.game-item:hover {
+    background-color: #070b0c;
+}
+
+.game-item:active {   
+    background-color: rgb(13, 18, 22);
+    transform: scale(0.95);
 }
 
 /* Game time styling */
@@ -41,24 +60,12 @@
     vertical-align: middle;
 }
 
-/* Row styling for the parent contaner holding the game items */
-.row{
+/* Row styling for the parent contaner holding the game items and the game day header */
+.row {
     display: flex;
-    flex-direction: row;
-    width: 70%;
-    margin-bottom: 10px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-/* Row hover styling */
-.row:hover {
-    background-color: rgb(57, 55, 57);
-}
-
-/* Row active/pressed styling */
-.row:active {   
-    background-color: rgb(57, 55, 57);
-    transform: scale(0.95);
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 5px;
 }
 
 /* Team info styling */

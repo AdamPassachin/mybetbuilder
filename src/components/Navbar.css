@@ -2,7 +2,7 @@
 
 /* Navbar styles for position */
 .navbar {
-    background-color: rgba(33,33,33,0.8);
+    background-color: rgba(16, 22, 28, 1);
     position: fixed;
     top: 0;
     left: 0;
@@ -54,7 +54,7 @@
 .nav-link {
     color: rgba(207,207,207,1);
     text-decoration: none;
-    font-size: 16px; /* Changed from 1.2rem to 19px (assuming default font size of 16px) */
+    font-size: 14px; /* Changed from 1.2rem to 19px (assuming default font size of 16px) */
     letter-spacing: 1.5px;
 }
 

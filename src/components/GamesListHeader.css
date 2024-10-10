@@ -1,14 +1,3 @@
-
-/* Divider styling for the leauge header */
-.divider {
-    height: 2px;
-    width: 70%;
-    background-color: rgba(202, 196, 208);
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 80px;
-}
-
 /* League logo styling */
 .league-logo {
     height: 30px;
@@ -17,12 +6,20 @@
 
 /* League name styling */
 .league-name {
-    font-size: 14px;
+    font-size: 18px;
     margin: 5px;
 }
 
-.games-list-header {
-    position: absolute;
-    left: 465px;
-    top: 180px;
+/* Gameweek styling */
+.gameweek {
+    margin:5px;
+    font-size: 18px;
 }
+/*  */
+.games-list-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+

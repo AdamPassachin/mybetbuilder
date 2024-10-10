@@ -6,14 +6,13 @@ function GamesListHeader({ currentGameweek }) {
 
   return (
     <>
-    <div className='games-list-header'>
-      Gameweek {currentGameweek}
-    </div>
-    <div className='divider'>
+      <div className='games-list-header'>
         <p className='league-name'>English Premier Leauge 24/25</p>
-        <img src={leaugeLogo} alt='league-logo' className='league-logo' />
+        <p className='gameweek'>Gameweek {currentGameweek}</p>
     </div>
-
+    <div className='image-container'>
+      <img src={leaugeLogo} alt='league-logo' className='league-logo' />
+      </div>
     </>
   )
 }

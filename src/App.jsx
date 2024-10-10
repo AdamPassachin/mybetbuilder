@@ -50,7 +50,9 @@ function App() {
       <div className='container'>
         <div className='container-left'>
             <GamesListHeader currentGameweek={currentGameweek} />
-            <GamesList currentGameweek={currentGameweek} onGameItemClick={handleShowHeroSection} />
+            <div className='games-list-container'>
+              <GamesList currentGameweek={currentGameweek} onGameItemClick={handleShowHeroSection} />
+            </div>
         </div>
         <div className='container-right'>
           {showHeroSection ? (<HeroSection />) : (<BetBuilder game={selectedGame} />)}

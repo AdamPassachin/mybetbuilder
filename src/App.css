@@ -1,24 +1,43 @@
 /* Added for the structure of app.jsx */
 .container {
   display: flex;
-  height: calc(100vh - 150px);
-  max-width: 100%;
+  height: auto;
+  margin-top: 100px;
 }
 
 /* Container left for the games list */
 .container-left {
-  width: 50vw;
+  width: 100%; /* Full width on smaller screens */
+  max-width: 30vw; /* Max width on larger screens */
   display: flex;
   flex-direction: column;
-  padding: 32px; /* Changed from 2rem to 32px */
-  margin-top: 100px;
+  justify-content: flex-start; /* Align content to the top */
+  padding: 16px;
+  margin-top: 80px; /* Reduced top margin */
+  margin-left: 50px; /* Remove left margin */
+  border: none; /* Add a light gray border */
+  background-color: rgba(28,38,50,1); /* Add a light gray background color */
+  border-radius: 8px; /* Optional: Add rounded corners */
+  height: auto; /* Allow height to grow as needed */
 }
 
 /* Container right for the hero and bet builder */
 .container-right {
-  width: 50vw;
+  width: 70vw;
   display: flex;
   padding: 32px;
-  justify-content: left;
+  justify-content: center;
   margin-top: 100px;
 }
+
+/* Inner container for the games list */
+.games-list-container {
+  background-color: rgba(16, 22, 28, 1);
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 16px; /* Add space between header and list */
+  display: flex;
+  flex-direction: column;
+  height: auto;
+}
+

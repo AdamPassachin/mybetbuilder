@@ -11,19 +11,15 @@ function GamesList({ onGameItemClick, currentGameweek}) {
     // State for the current games in the current gameweek
     const [currentGames, setCurrentGames] = useState([]);
 
-    // State for last unique gamedate
-    const [lastGameDate, setLastGameDate] = useState(null);
-
     // Days of the week
-    const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const daysOfWeek = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     // Months of the year
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-
     // Fetch the current games in the current gameweek from the backend
     useEffect(() => {
-           fetch(`${import.meta.env.VITE_API_BASE_URL}/games?gameweek=${currentGameweek}`)
+          fetch(`${import.meta.env.VITE_API_BASE_URL}/games?gameweek=${currentGameweek}`)
           .then(response => {
             if (!response.ok) {
               throw new Error('Network response was not ok');
@@ -38,30 +34,34 @@ function GamesList({ onGameItemClick, currentGameweek}) {
           });
       }, [currentGameweek]);
 
-      function ConvertDateHeader(fullDate){
+    // Move this function outside of the return statement
+    function ConvertDateHeader(fullDate){
         const date = new Date(fullDate);
         const day = date.getDay();
         const dateDay = date.getDate();
         const month = date.getMonth();
         return `${daysOfWeek[day]}, ${dateDay} ${months[month]}`;
     }
-    
 
-    // Render the games list - create a row for each game and pass the game data to the GameItem component.
-  return (
-    <>
-        {currentGames.map(game => (
-          <>
-            {game.fixture.date !== lastGameDate ? (
-              <GameDayHeader gameweek={ConvertDateHeader(game.fixture.date)} />
-            ) : null}
-            <div className='row' key={game.fixture.id} onClick={() => onGameItemClick(game)}>
-              <GameItem game={game} />
-            </div>
-          </> 
-        ))} 
-    </>
-  );
-}
+    return (
+        <>
+            {currentGames.map((game, index) => {
+                const currentGameDate = ConvertDateHeader(game.fixture.date);
+                const showHeader = index === 0 || currentGameDate !== ConvertDateHeader(currentGames[index - 1].fixture.date);
+                
+                return (
+                    <React.Fragment key={game.fixture.id}>
+                        <div className='row' onClick={() => onGameItemClick(game)}>
+                          {showHeader && (
+                            <GameDayHeader gameDate={currentGameDate} />
+                        )}
+                            <GameItem game={game} />
+                        </div>
+                    </React.Fragment>
+                );
+            })} 
+        </>
+    );
+};
 
 export default GamesList;
