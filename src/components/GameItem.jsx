@@ -4,6 +4,9 @@ import arrowForward from '../assets/icons/arrow-forward.svg';
 // GameItem component for displaying a single game item
 function GameItem({ game }) {
 
+    // Store status of game to render based on game's status NS, FT or Live
+    const gameStatus = game.fixture.status.short;
+
     // Convert the date to a more readable format in hours and minutes
     function convertTime(fullDate) {
         const date = new Date(fullDate);
@@ -12,17 +15,14 @@ function GameItem({ game }) {
         return `${hours}:${minutes}`;
     }
 
-    // Check if game is NS, FT or live
-    function gameFinished(gameStatus){
-        return gameStatus === "FT"
-    }
-
     // Render the game item, filled with game data from API
     return (
         <div className="game-item">
-            <div className="game-time">{gameFinished(game.fixture.status.short) ? game.fixture.status.short : convertTime(game.fixture.date)}</div>
+            <div className="game-time">
+                {gameStatus === "FT" ? "FT" :  gameStatus === "1H" || gameStatus === "2H"  ? "Live": convertTime(game.fixture.date)}
+            </div>
             <div className="vertical-line"></div>
-            {gameFinished(game.fixture.status.short) && (
+            {(gameStatus === "FT") && (
                 <div className='game-score'>
                     <div className='game-score-team'>{game.score.fulltime.home}</div>
                     <div className='game-score-team'>{game.score.fulltime.away}</div>
