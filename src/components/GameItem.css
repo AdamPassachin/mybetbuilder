@@ -1,4 +1,4 @@
-/* GameItem component styling */        
+/* GameItem component outer div styling */        
 .game-item {
     display: flex;
     align-items: center;
@@ -8,26 +8,19 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.game-score{
-    display:flex;
-    align-items:center;
-    justify-content: space-between;
-    flex-direction: column;
-    margin-right: 15px;
-    margin-left: 5px;
-}
-
+/* GameItem component outer div styling when hovered */
 .game-item:hover {
     background-color: #070b0c;
 }
 
+/* GameItem component outer div styling when pressed */
 .game-item:active {   
     background-color: rgb(13, 18, 22);
     transform: scale(0.95);
 }
 
-/* Game time styling */
-.game-time {
+/* Game status styling when game is NS, FT or LIVE */
+.game-status {
     display: flex;
     padding: 8px;
     align-items: center;
@@ -85,10 +78,24 @@
     justify-content: center;
 }
 
+/* Button styling for each game */
 .button-icon {
     width: 24px;  /* Adjust this value to match your image size */
     height: 24px; /* Adjust this value to match your image size */
     opacity: 0.6;
 }
 
+/* Game score styling */
+.game-score{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    flex-direction: column;
+    margin-right: 15px;
+    margin-left: 5px;
+}
 
+/* Added styling when game is live */
+.live-status{
+    background-color: rgb(55, 212, 49);
+}
