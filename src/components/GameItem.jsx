@@ -1,11 +1,17 @@
 import './GameItem.css';
 import arrowForward from '../assets/icons/arrow-forward.svg';
+import { useEffect, useState } from 'react';
 
 // GameItem component for displaying a single game item
 function GameItem({ game }) {
 
-    // Store status of game to render based on game's status NS, FT or Live
-    const gameStatus = game.fixture.status.short;
+    // Store state status of game to render based on game's status NS, FT or Live
+    const [gameStatus, setGameStatus] = useState(game.fixture.status.short);
+
+    // Update GameStatus whenever the game prop changes
+    useEffect(() => {
+        setGameStatus(game.fixture.status.short);
+    }, [game.fixture.status.short]);
 
     // Convert the date to a more readable format in hours and minutes
     function convertTime(fullDate) {

@@ -18,18 +18,21 @@ function App() {
   // State to store current gameweek
   const [currentGameweek, setCurrentGameweek] = useState(null);
 
-  // Fetch current gameweek from backend
+  const [currentGames, setCurrentGames] = useState([]);
+
+  // Fetch current gameweek and corresponding games from API route in backend based on next 10 games
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/gameweek`) 
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/games`) 
       .then(response =>{
         if(!response.ok){
-          throw new Error('Failed to fetch current gameweek');
+          throw new Error('Failed to fetch current gameweek and games');
         }
         return response.json();
       })
       .then(data => {
         if(data.response && data.response.length > 0){
-          setCurrentGameweek(parseInt(data.response[0].split('-')[1].trim()));
+          setCurrentGameweek(parseInt(data.response[0].league.round.split('-')[1].trim()));
+          setCurrentGames(data.response);
         }
       })
       .catch(error => {
@@ -51,7 +54,7 @@ function App() {
         <div className='container-left'>
             <GamesListHeader currentGameweek={currentGameweek} />
             <div className='games-list-container'>
-              <GamesList currentGameweek={currentGameweek} onGameItemClick={handleShowHeroSection} />
+              <GamesList currentGames={currentGames} onGameItemClick={handleShowHeroSection} />
             </div>
         </div>
         <div className='container-right'>
