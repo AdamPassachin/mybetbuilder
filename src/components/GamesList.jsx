@@ -8,39 +8,50 @@ import { useState, useEffect } from 'react';
 // GamesList component for the games list. We make api call here and pass the data to the Game component. Create row for each game.
 function GamesList({ onGameItemClick, currentGameweek}) {
 
-    // State for the current games in the current gameweek
-    const [currentGames, setCurrentGames] = useState([]);
-
     // Days of the week
     const daysOfWeek = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     // Months of the year
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-    // Fetch the current games in the current gameweek from the backend
-    useEffect(() => {
-          fetch(`${import.meta.env.VITE_API_BASE_URL}/games?gameweek=${currentGameweek}`)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return response.json();
-          })
-          .then(data => {
-            setCurrentGames(data.response);
-          })
-          .catch(error => {
-            console.error('Error fetching games:', error);
-          });
-      }, [currentGameweek]);
+    const [currentGames, setCurrentGames] = useState([])
 
-    // Move this function outside of the return statement
+    useEffect(() => {
+      fetch(`${import.meta.env.VITE_API_BASE_URL}/games?gameweek=${currentGameweek}`) 
+        .then(response =>{
+          if(!response.ok){
+            throw new Error('Failed to fetch games');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if(data.response && data.response.length > 0){
+            setCurrentGames(data.response);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching current games:', error);
+        });
+    }, [currentGames]);
+
+    //Function to convert and format the date for the header
     function ConvertDateHeader(fullDate){
         const date = new Date(fullDate);
         const day = date.getDay();
         const dateDay = date.getDate();
         const month = date.getMonth();
-        return `${daysOfWeek[day]}, ${dateDay} ${months[month]}`;
+
+        // Determine the ordinal suffix
+        const suffix = (dateDay) => {
+            if (dateDay > 3 && dateDay < 21) return 'th'; // Catch 11th-13th
+            switch (dateDay % 10) {
+                case 1: return 'st';
+                case 2: return 'nd';
+                case 3: return 'rd';
+                default: return 'th';
+            }
+        };
+        return `${daysOfWeek[day]}, ${dateDay}${suffix(dateDay)} ${months[month]}`;
     }
 
     return (
