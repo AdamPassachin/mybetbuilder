@@ -1,11 +1,17 @@
 import './GameItem.css';
 import arrowForward from '../assets/icons/arrow-forward.svg';
+import { useEffect, useState } from 'react';
 
 // GameItem component for displaying a single game item
 function GameItem({ game }) {
 
-    // Store status of game to render based on game's status NS, FT or Live
-    const gameStatus = game.fixture.status.short;
+    // Store state status of game to render based on game's status NS, FT or Live
+    const [gameStatus, setGameStatus] = useState(game.fixture.status.short);
+
+    // Update GameStatus whenever the game prop changes
+    useEffect(() => {
+        setGameStatus(game.fixture.status.short);
+    }, [game.fixture.status.short]);
 
     // Convert the date to a more readable format in hours and minutes
     function convertTime(fullDate) {
@@ -18,10 +24,9 @@ function GameItem({ game }) {
     // Render the game item, filled with game data from API
     return (
         <div className="game-item">
-            <div className={`game-status ${gameStatus === "1H" || gameStatus === "2H" ? 'live-status' : '' }`}>
-                {gameStatus === "FT" ? "FT" :  gameStatus === "1H" || gameStatus === "2H"  ? "Live": convertTime(game.fixture.date)}
+            <div className={`game-status ${gameStatus === "1H" || gameStatus === "2H" || gameStatus === "HT" ? 'live-status' : '' }`}>
+                {gameStatus === "FT" ? "FT" :  gameStatus === "1H" || gameStatus === "2H" || gameStatus === "HT"  ? "Live": convertTime(game.fixture.date)}
             </div>
-            <div className="vertical-line"></div>
             {(gameStatus === "FT") && (
                 <div className='game-score'>
                     <div className='game-score-team'>{game.score.fulltime.home}</div>
