@@ -24,10 +24,9 @@ function GameItem({ game }) {
     // Render the game item, filled with game data from API
     return (
         <div className="game-item">
-            <div className={`game-status ${gameStatus === "1H" || gameStatus === "2H" ? 'live-status' : '' }`}>
-                {gameStatus === "FT" ? "FT" :  gameStatus === "1H" || gameStatus === "2H"  ? "Live": convertTime(game.fixture.date)}
+            <div className={`game-status ${gameStatus === "1H" || gameStatus === "2H" || gameStatus === "HT" ? 'live-status' : '' }`}>
+                {gameStatus === "FT" ? "FT" :  gameStatus === "1H" || gameStatus === "2H" || gameStatus === "HT"  ? "Live": convertTime(game.fixture.date)}
             </div>
-            <div className="vertical-line"></div>
             {(gameStatus === "FT") && (
                 <div className='game-score'>
                     <div className='game-score-team'>{game.score.fulltime.home}</div>

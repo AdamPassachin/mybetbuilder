@@ -27,7 +27,12 @@
     justify-content: center;
     height: 40px;
     width: 40px;
+    margin-right: 5px;
 
+}
+
+.finished-status {
+    margin-left: 0 !important;
 }
 
 /* Vertical line styling */
@@ -58,7 +63,6 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin-bottom: 5px;
 }
 
 /* Team info styling */
@@ -85,17 +89,23 @@
     opacity: 0.6;
 }
 
-/* Game score styling */
+/* Game score styling when game is FT */
 .game-score{
+    background-color: #171f21;
     display:flex;
     align-items:center;
-    justify-content: space-between;
+    justify-content: center;
     flex-direction: column;
-    margin-right: 15px;
-    margin-left: 5px;
+    margin-right: 10px;
+    width: 50px;
+    height:100%;
 }
 
 /* Added styling when game is live */
 .live-status{
     background-color: rgb(55, 212, 49);
+    padding: 8px;
+    margin-right: 15px;
 }
+
+

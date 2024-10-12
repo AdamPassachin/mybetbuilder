@@ -18,21 +18,18 @@ function App() {
   // State to store current gameweek
   const [currentGameweek, setCurrentGameweek] = useState(null);
 
-  const [currentGames, setCurrentGames] = useState([]);
-
-  // Fetch current gameweek and corresponding games from API route in backend based on next 10 games
+  // Fetch current gameweek from backend
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/games`) 
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/gameweek`) 
       .then(response =>{
         if(!response.ok){
-          throw new Error('Failed to fetch current gameweek and games');
+          throw new Error('Failed to fetch current gameweek');
         }
         return response.json();
       })
       .then(data => {
         if(data.response && data.response.length > 0){
-          setCurrentGameweek(parseInt(data.response[0].league.round.split('-')[1].trim()));
-          setCurrentGames(data.response);
+          setCurrentGameweek(parseInt(data.response[0].split('-')[1].trim()));
         }
       })
       .catch(error => {
@@ -53,9 +50,9 @@ function App() {
       <div className='container'>
         <div className='container-left'>
             <GamesListHeader currentGameweek={currentGameweek} />
-            <div className='games-list-container'>
-              <GamesList currentGames={currentGames} onGameItemClick={handleShowHeroSection} />
-            </div>
+            <div className='games-list-container'></div>
+            <GamesList currentGameweek={currentGameweek} onGameItemClick={handleShowHeroSection} />
+            
         </div>
         <div className='container-right'>
           {showHeroSection ? (<HeroSection />) : (<BetBuilder game={selectedGame} />)}

@@ -14,13 +14,24 @@ function GamesList({ onGameItemClick, currentGames}) {
     // Months of the year
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-    // Move this function outside of the return statement
+    //Function to convert and format the date for the header
     function ConvertDateHeader(fullDate){
         const date = new Date(fullDate);
         const day = date.getDay();
         const dateDay = date.getDate();
         const month = date.getMonth();
-        return `${daysOfWeek[day]}, ${dateDay} ${months[month]}`;
+
+        // Determine the ordinal suffix
+        const suffix = (dateDay) => {
+            if (dateDay > 3 && dateDay < 21) return 'th'; // Catch 11th-13th
+            switch (dateDay % 10) {
+                case 1: return 'st';
+                case 2: return 'nd';
+                case 3: return 'rd';
+                default: return 'th';
+            }
+        };
+        return `${daysOfWeek[day]}, ${dateDay}${suffix(dateDay)} ${months[month]}`;
     }
 
     return (
