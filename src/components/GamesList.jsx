@@ -14,7 +14,7 @@ function GamesList({ onGameItemClick, currentGameweek}) {
     // Months of the year
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-    const [currentGames, setCurrentGames] = useState([])
+    const [currentGames, setCurrentGames] = useState([]);
 
     useEffect(() => {
       fetch(`${import.meta.env.VITE_API_BASE_URL}/games?gameweek=${currentGameweek}`) 
@@ -32,7 +32,7 @@ function GamesList({ onGameItemClick, currentGameweek}) {
         .catch(error => {
           console.error('Error fetching current games:', error);
         });
-    }, [currentGames]);
+    }, [currentGameweek]);
 
     //Function to convert and format the date for the header
     function ConvertDateHeader(fullDate){
