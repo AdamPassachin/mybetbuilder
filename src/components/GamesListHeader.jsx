@@ -1,5 +1,4 @@
 import './GamesListHeader.css';
-import leaugeLogo from '../assets/leauge-logo/leauge-logo.svg';
 
 // GamesListHeader component for the games list header
 function GamesListHeader({ currentGameweek }) {
@@ -11,7 +10,7 @@ function GamesListHeader({ currentGameweek }) {
         <p className='gameweek'>Gameweek {currentGameweek}</p>
     </div>
     <div className='image-container'>
-      <img src={leaugeLogo} alt='league-logo' className='league-logo' />
+      <img src='/leauge-logo.svg' alt='league-logo' className='league-logo' />
       </div>
     </>
   )

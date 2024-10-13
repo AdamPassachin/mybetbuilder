@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 
 
 // GamesList component for the games list. We make api call here and pass the data to the Game component. Create row for each game.
-function GamesList({ onGameItemClick, currentGameweek}) {
+function GamesList({ onGameItemClick, currentGameweek, onConvertTime, gameStatus, setGameStatus}) {
 
     // Days of the week
     const daysOfWeek = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -17,21 +17,21 @@ function GamesList({ onGameItemClick, currentGameweek}) {
     const [currentGames, setCurrentGames] = useState([]);
 
     useEffect(() => {
-      fetch(`${import.meta.env.VITE_API_BASE_URL}/games?gameweek=${currentGameweek}`) 
-        .then(response =>{
-          if(!response.ok){
+      const fetchGames = async () => {
+        try {
+          const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/games?gameweek=${currentGameweek}`);
+          if (!response.ok) {
             throw new Error('Failed to fetch games');
           }
-          return response.json();
-        })
-        .then(data => {
-          if(data.response && data.response.length > 0){
+          const data = await response.json();
+          if (data.response && data.response.length > 0) {
             setCurrentGames(data.response);
           }
-        })
-        .catch(error => {
+        } catch (error) {
           console.error('Error fetching current games:', error);
-        });
+        }
+      };
+      fetchGames();
     }, [currentGameweek]);
 
     //Function to convert and format the date for the header
@@ -62,11 +62,13 @@ function GamesList({ onGameItemClick, currentGameweek}) {
                 
                 return (
                     <React.Fragment key={game.fixture.id}>
-                        <div className='row' onClick={() => onGameItemClick(game)}>
+                        <div className='row'>
                           {showHeader && (
                             <GameDayHeader gameDate={currentGameDate} />
-                        )}
-                            <GameItem game={game} />
+                          )}
+                          <div className='game-container' onClick={() => onGameItemClick(game)}>
+                            <GameItem game={game} onConvertTime={onConvertTime} gameStatus = {gameStatus} setGameStatus = {setGameStatus}/>
+                          </div>
                         </div>
                     </React.Fragment>
                 );

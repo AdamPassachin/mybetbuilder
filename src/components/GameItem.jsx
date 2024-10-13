@@ -3,29 +3,18 @@ import arrowForward from '../assets/icons/arrow-forward.svg';
 import { useEffect, useState } from 'react';
 
 // GameItem component for displaying a single game item
-function GameItem({ game }) {
-
-    // Store state status of game to render based on game's status NS, FT or Live
-    const [gameStatus, setGameStatus] = useState(game.fixture.status.short);
+function GameItem({ game, onConvertTime, gameStatus, setGameStatus }) {
 
     // Update GameStatus whenever the game prop changes
     useEffect(() => {
         setGameStatus(game.fixture.status.short);
     }, [game.fixture.status.short]);
 
-    // Convert the date to a more readable format in hours and minutes
-    function convertTime(fullDate) {
-        const date = new Date(fullDate);
-        const hours = date.getHours().toString().padStart(2, '0');
-        const minutes = date.getMinutes().toString().padStart(2, '0');
-        return `${hours}:${minutes}`;
-    }
-
     // Render the game item, filled with game data from API
     return (
         <div className="game-item">
             <div className={`game-status ${gameStatus === "1H" || gameStatus === "2H" || gameStatus === "HT" ? 'live-status' : '' }`}>
-                {gameStatus === "FT" ? "FT" :  gameStatus === "1H" || gameStatus === "2H" || gameStatus === "HT"  ? "Live": convertTime(game.fixture.date)}
+                {gameStatus === "FT" ? "FT" :  gameStatus === "1H" || gameStatus === "2H" || gameStatus === "HT"  ? "Live": onConvertTime(game.fixture.date)}
             </div>
             {(gameStatus === "FT") && (
                 <div className='game-score'>
