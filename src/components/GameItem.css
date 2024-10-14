@@ -10,14 +10,16 @@
 
 /* GameItem component outer div styling when hovered */
 .game-item:hover {
-    background-color: #070b0c;
+    background-color: #545656;
 }
 
-/* GameItem component outer div styling when pressed */
-.game-item:active {   
-    background-color: rgb(13, 18, 22);
+/* GameItem component outer div styling when pressed or focused */
+.game-item:active, 
+.game-item:focus {   
+    background-color: #545656;
     transform: scale(0.95);
 }
+
 
 /* Game status styling when game is NS, FT or LIVE */
 .game-status {
@@ -107,5 +109,6 @@
     padding: 8px;
     margin-right: 15px;
 }
+
 
 

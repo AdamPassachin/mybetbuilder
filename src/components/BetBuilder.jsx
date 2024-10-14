@@ -34,18 +34,20 @@ function BetBuilder({ game, onConvertTime, gameStatus, setGameStatus }) {
                         <p className='team-header-name'>{game.teams.away.name}</p>
                     </div>
                 </div>
-                <p>Player booked</p>
-                <div className='divider-betbuilder'></div>
-                <div className='bookmakers-container'>
-                    {/* {bookmakers.map(bookmaker => (
-                        <Bookmakers key={bookmaker.id} bookmaker={bookmaker} />
-                    ))} */}
-                </div>
-                <div className='bookmakers-container'>
-                    {/* <p className='player-name'>{bookmakers[0].player.name}</p>
-                    {/* {bookmakers.map(bookmaker => (
-                        <PlayerCard key={bookmaker.id} bookmaker={bookmaker}/>
-                    ))} */} 
+                <div className='team-player-container'>
+                    <p>Player booked</p>
+                    <div className='divider-betbuilder'></div>
+                    <div className='bookmakers-container'>
+                        {/* {bookmakers.map(bookmaker => (
+                            <Bookmakers key={bookmaker.id} bookmaker={bookmaker} />
+                        ))} */}
+                    </div>
+                    <div className='bookmakers-container'>
+                        {/* <p className='player-name'>{bookmakers[0].player.name}</p>
+                        {/* {bookmakers.map(bookmaker => (
+                            <PlayerCard key={bookmaker.id} bookmaker={bookmaker}/>
+                        ))} */} 
+                    </div>
                 </div>
             </div>
         </div>

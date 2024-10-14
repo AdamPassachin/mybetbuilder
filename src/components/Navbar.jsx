@@ -6,13 +6,16 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <span className="navbar-logo">MYBETBUILDER</span>
+        <img className='navbar-logo' src="/public/mybetbuilder-logo.svg" alt='mybetbuilderlogo'></img>
         <ul className="nav-menu">
           <li className="nav-item">
-            <a href="/bet-builder" className="nav-link">BET BUILDER</a>
+            <a href="#" className="nav-link">HOW-TO</a>
           </li>
           <li className="nav-item">
-            <a href="/contact" className="nav-link">CONTACT</a>
+            <a href="#" className="nav-link">ABOUT US</a>
+          </li>
+          <li className="nav-item">
+            <a href="#" className="nav-link">CONTACT</a>
           </li>
         </ul>
       </div>

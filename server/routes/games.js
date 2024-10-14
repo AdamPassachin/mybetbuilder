@@ -57,4 +57,6 @@ export default async function gamesRoutes(fastify, opts) {
         }        
     });
 
+    // Route to get players 
+
 }

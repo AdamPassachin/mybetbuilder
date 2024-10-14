@@ -16,6 +16,7 @@
     color: rgb(46, 26,5);
     background-color: #e0e0e0; 
     padding: 0 8px; 
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* hero-subtitle */
@@ -23,6 +24,35 @@
     font-size: 16px; 
     color: #cccccc; 
     line-height: 1.5;
+    overflow: hidden; /* Ensures the text is hidden while typing */
+    white-space: nowrap; /* Prevents text from wrapping */
+    width: 0; /* Start with width 0 for typing effect */
+    animation: typing 2s steps(30, end) forwards; /* Apply typing animation */
 }
 
+.hero-section{
+    position: fixed; /* Make the hero section fixed */
+    top: 250px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
+    animation: slideIn 0.8s forwards; /* Apply the slide-in animation */
+    transform: translateX(100%); /* Start off-screen to the right */
+    opacity: 0; /* Start invisible */
+}
 
+/* Define the keyframes for the slide-in animation */
+@keyframes slideIn {
+    to {
+        transform: translateX(0); /* Move to original position */
+        opacity: 1; /* Fade in */
+    }
+}
+
+/* Define the typing animation */
+@keyframes typing {
+    from {
+        width: 0; /* Start with no width */
+    }
+    to {
+        width: 100%; /* End with full width to keep the text visible */
+    }
+}

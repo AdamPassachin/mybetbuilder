@@ -17,9 +17,10 @@
   margin-left: 50px; /* Remove left margin */
   margin-bottom: 40px;
   border: none; /* Add a light gray border */
-  background-color: rgba(28,38,50,1); /* Add a light gray background color */
+  background-color: rgb(31, 33, 35); /* Add a light gray background color */
   border-radius: 8px; /* Optional: Add rounded corners */
   height: auto; /* Allow height to grow as needed */
+  min-height: 600px; /* Set a minimum height to prevent contraction */
 }
 
 /* Container right for the hero and bet builder */
@@ -33,7 +34,7 @@
 
 /* Inner container for the games list */
 .games-list-container {
-  background-color: rgba(16, 22, 28, 1);
+  background-color: rgb(0, 0, 0);
   border-radius: 8px;
   padding: 15px;
   margin-top: 16px; /* Add space between header and list */
@@ -41,4 +42,3 @@
   flex-direction: column;
   height: auto;
 }
-

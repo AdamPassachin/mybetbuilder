@@ -2,7 +2,7 @@
 
 /* Navbar styles for position */
 .navbar {
-    background-color: rgba(16, 22, 28, 1);
+    background: linear-gradient(to right, black 50%, rgba(0, 0, 0, 0) 50%); /* Added gradient for half black and half transparent */
     position: fixed;
     top: 0;
     left: 0;
@@ -22,13 +22,8 @@
 
 /* Navbar logo */
 .navbar-logo {
-    font-size: 36px;
-    color: rgba(207,207,207,1);
-    font-family: 'Bangers', system-ui;
-    letter-spacing: 2px;
-    margin-right: 32px; 
-    cursor: default;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
+    width: 180px;
+    height: 180px;
 }
 
 /* Navbar logo hover effect */

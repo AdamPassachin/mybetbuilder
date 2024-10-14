@@ -9,7 +9,7 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: rgba(255, 255, 255, 0.93);
 
 
   font-synthesis: none;
@@ -27,5 +27,10 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background-color: rgba(16, 22, 28, 1);
+  background-image: url('/backgroundpic.jpg'); /* Replace with your image path */
+  background-size: cover; /* Ensures the image covers the entire background */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-attachment: fixed; /* Keeps the background fixed during scrolling */
+  background-position: center; /* Centers the image */
 }
 
