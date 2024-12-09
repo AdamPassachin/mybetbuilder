@@ -23,7 +23,6 @@ function BetBuilder({ game, onConvertTime }) {
             const data = await response.json();
             if (data.response && data.response.length > 0) {
               setMarkets(data.response);
-              console.log(markets);
             }
           } catch (error) {
             console.error('Error fetching markets:', error);
@@ -31,6 +30,26 @@ function BetBuilder({ game, onConvertTime }) {
         };
         fetchMarkets();
       }, [fixture_id]);
+
+    // Function to group bets by their name
+    const groupBetsByType = (markets) => {
+        const groupedBets = {};
+
+        markets.forEach(market => {
+            market.bookmakers.forEach(bookmaker => {
+                bookmaker.bets.forEach(bet => {
+                    if (!groupedBets[bet.name]) {
+                        groupedBets[bet.name] = [];
+                    }
+                    groupedBets[bet.name].push({ bookmakerId: bookmaker.id, bookmakerName: bookmaker.name, ...bet });
+                });
+            });
+        });
+
+        return groupedBets;
+    };
+
+    const groupedBets = groupBetsByType(markets);
 
     return (
         <>
@@ -56,12 +75,17 @@ function BetBuilder({ game, onConvertTime }) {
                     </div>
                 </div>
                 <div className='bg-white rounded p-4'>
-                    {markets.length > 0 ? (
-                        markets.map((market, index) => (
-                            <MarketAccordion key={index} market={market} />
+                    {Object.keys(groupedBets).length > 0 ? (
+                        Object.keys(groupedBets).map(betType => (
+                            <MarketAccordion 
+                                key={betType} 
+                                market={groupedBets[betType]} 
+                                homeTeam={game.teams.home.name} 
+                                awayTeam={game.teams.away.name} 
+                            />
                         ))
                     ) : (
-                        <p>Loading markets...</p>
+                        <span className="loading loading-dots loading-md"></span>
                     )}
                 </div>
             </div>
