@@ -8,7 +8,7 @@ function MarketAccordion({market, homeTeam, awayTeam}){
         }
         return value;
     };
-
+    
     return(
         <div className="collapse collapse-arrow bg-white text-black">
             <input type="radio" name="accordion" id="accordion-market" />
@@ -16,19 +16,35 @@ function MarketAccordion({market, homeTeam, awayTeam}){
                 {market[0]?.name}
             </div>
             <div className="collapse-content">
-                {market.map((bookmaker) => (
-                    <div key={bookmaker.id}>
-
-                        <ul>
-                            <p>{bookmaker.bookmakerName}</p>
-                            {bookmaker.values.map((value) => (
-                                <li key={value.value}>
-                                    {replaceTeamNames(value.value)}: {value.odd}
-                                </li>
+                <table className="table">
+                    <thead>
+                        <tr className="border-b border-gray-200">
+                            <th></th>
+                            {market.map((bookmaker) => (
+                                <th key={bookmaker.id} className="text-center">{bookmaker.bookmakerName}</th>
                             ))}
-                        </ul>
-                    </div>
-                ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {market[0]?.values.map((value) => (
+                            <tr key={value.value} className="border-b border-gray-200">
+                                <td>{replaceTeamNames(value.value)}</td>
+                                {market.map((bookmaker) => {
+                                    const oddValue = bookmaker.values.find(v => v.value === value.value);
+                                    return (
+                                        <td key={bookmaker.id} className="text-center">
+                                            <div className="flex justify-center">
+                                                <div className="w-12 rounded-lg border border-black p-1">
+                                                    {oddValue ? oddValue.odd : 'N/A'}
+                                                </div>
+                                            </div>
+                                        </td>
+                                    );
+                                })}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
             <hr />
         </div>
