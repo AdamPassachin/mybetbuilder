@@ -54,23 +54,25 @@ function BetBuilder({ game, onConvertTime }) {
     return (
         <>
             <div className="flex flex-col bg-gray-300 p-5 mt-4 rounded-lg">
-                <div className='flex items-center justify-between mb-10'>
-                    <div className='text-center mx-5'>
-                        <img className='w-10 h-10 mx-auto' src={game.teams.home.logo} alt={`${game.teams.home.name} logo`} />
+                <div className='flex items-center justify-center mb-10'>
+                    <div className='text-center'>
+                        <img className='w-12 h-12 mx-auto' src={game.teams.home.logo} alt={`${game.teams.home.name} logo`} />
                         <p className='text-lg my-1'>{game.teams.home.name}</p>
                     </div>
-                    <div className='flex flex-col items-center'>
+                    <div className='flex flex-col items-center mx-20'>
                         {(gameStatus === "FT") && (
-                            <div className='text-2xl flex'>
+                            <div className='text-3xl flex'>
                                 {game.score.fulltime.home}
                                 -
                                 {game.score.fulltime.away}
                             </div> 
                         )}    
-                        {gameStatus === "FT" ? "FT" :  gameStatus === "1H" || gameStatus === "2H" || gameStatus === "HT"  ? "Live": onConvertTime(game.fixture.date)}
+                        <span className='text-xl'>
+                            {gameStatus === "FT" ? "FT" :  gameStatus === "1H" || gameStatus === "2H" || gameStatus === "HT"  ? "Live": onConvertTime(game.fixture.date)}
+                        </span>
                     </div>
-                    <div className='text-center mx-5'>
-                        <img className='w-10 h-10 mx-auto' src={game.teams.away.logo} alt={`${game.teams.away.name} logo`} />
+                    <div className='text-center'>
+                        <img className='w-12 h-12 mx-auto' src={game.teams.away.logo} alt={`${game.teams.away.name} logo`} />
                         <p className='text-lg my-1'>{game.teams.away.name}</p>
                     </div>
                 </div>

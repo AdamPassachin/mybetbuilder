@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect} from 'react'
 import Navbar from './components/Navbar'
-import HowToTutorial from './components/HowToTutorial'
 import GamesList from './components/GamesList'
 import GamesListHeader from './components/GamesListHeader'
 import BetBuilder from './components/BetBuilder'
@@ -9,14 +8,6 @@ import chevronLeft from './assets/icons/chevron-left.svg'
 
 function App() {
 
-  // Create a referene to the how-to section
-  const howToRef = useRef(null);
-
-  const scrollHowTo = () => {
-    if(howToRef.current) {
-      howToRef.current.scrollIntoView({behavior: 'smooth'});
-    }
-  }
 
   // State to control the visibility of the betbuilder 
   const [showBetBuilder, setShowBetBuilder] = useState(false);
@@ -65,9 +56,9 @@ function App() {
   
   return (
     <>
-      <Navbar onScrollHowTo={scrollHowTo} />
+      <Navbar/>
       <div className='w-screen flex justify-center'>
-        <div className='w-[80vw] flex flex-col p-4 my-40 border-none bg-gray-200 rounded-md min-h-[600px] shadow-md'>
+        <div className='w-[90vw] flex flex-col p-4 my-40 border-none bg-gray-200 rounded-md min-h-[600px] shadow-md'>
           {showBetBuilder && (
             <button className='flex justify-center items-center border-none bg-transparent w-9 h-9 hover:bg-gray-300' onClick={() => setShowBetBuilder(false)}>
               <img className='w-5 h-5' src={chevronLeft} alt='Return' />
@@ -87,9 +78,6 @@ function App() {
           )}
           {showBetBuilder ? <BetBuilder game={selectedGame} onConvertTime={convertTime} /> : null}
         </div>
-      </div>
-      <div className='flex flex-col bg-[#06052c] text-gray-400 w-full h-auto' ref={howToRef}>
-        <HowToTutorial/>
       </div>
     </>
   )
