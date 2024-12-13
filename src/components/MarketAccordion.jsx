@@ -1,5 +1,3 @@
-import React from 'react';
-
 function MarketAccordion({ market, homeTeam, awayTeam }) {
 
     const replaceTeamNames = (value) => {
@@ -18,39 +16,47 @@ function MarketAccordion({ market, homeTeam, awayTeam }) {
                 {market[0]?.name}
             </div>
             <div className="collapse-content">
-                <div className="grid grid-cols-1 gap-1">
-                    {/* Headers */}
-                    <div className="flex items-center border-b border-gray-200">
-                        <div className="p-2 text-sm font-medium w-32"></div>
-                        {market.map((bookmaker) => (
-                            <div key={bookmaker.id} className="p-2 text-sm font-medium w-1/4 text-center">
-                                <div className="h-20 flex items-center justify-center">
-                                    <span className="block transform -rotate-90 whitespace-nowrap">
-                                        {bookmaker.bookmakerName}
-                                    </span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                    {/* Rows */}
-                    {market[0]?.values.map((value) => (
-                        <div key={value.value} className="flex items-center border-b border-gray-200">
-                            <div className="p-2 text-sm truncate w-1/4">
-                                {replaceTeamNames(value.value)}
-                            </div>
-                            {market.map((bookmaker) => {
-                                const oddValue = bookmaker.values.find((v) => v.value === value.value);
-                                return (
-                                    <div key={bookmaker.id} className="text-center p-2 text-sm w-1/4">
-                                        <div className="flex justify-center items-center border rounded w-full">
-                                            {oddValue ? oddValue.odd : "-"}
-                                        </div>
+                <table className="table-fixed w-full border-collapse ">
+                    <thead>
+                        <tr className="border-b border-gray-200">
+                            <th className="p-1 text-sm w-1/4"></th>
+                            {market.map((bookmaker) => (
+                                <th key={bookmaker.id} className="p-1 text-sm w-1/4">
+                                    <div className="h-28 flex items-center justify-center">
+                                        <span className="block whitespace-nowrap transform  text-center mx-auto px-4">
+                                            {bookmaker.bookmakerName}
+                                        </span>
                                     </div>
-                                );
-                            })}
-                        </div>
-                    ))}
-                </div>
+                                </th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {market[0]?.values.map((value) => (
+                            <tr key={value.value} className="border-b border-gray-200">
+                                <td className="p-1 text-sm truncate">
+                                    {replaceTeamNames(value.value)}
+                                </td>
+                                {market.map((bookmaker) => {
+                                    const oddValue = bookmaker.values.find((v) => v.value === value.value);
+                                    return (
+                                        <td key={bookmaker.id} className="text-center p-4 text-sm w-1/4">
+                                            {oddValue ? (
+                                                <div className="flex justify-center items-center w-full h-full">
+                                                    <div className="bg-[#DFFAFF] border rounded w-full h-full shadow-md p-2 transition-transform transform hover:scale-104 hover:shadow-lg">
+                                                        {oddValue.odd}
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="h-full w-full"></div>
+                                            )}
+                                        </td>
+                                    );
+                                })}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
             <hr />
         </div>
@@ -58,3 +64,4 @@ function MarketAccordion({ market, homeTeam, awayTeam }) {
 }
 
 export default MarketAccordion;
+
