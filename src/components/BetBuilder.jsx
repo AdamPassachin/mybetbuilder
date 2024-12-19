@@ -1,16 +1,53 @@
 import { useEffect, useState } from 'react';
 import MarketAccordion from './MarketAccordion';
+import Betslip from './Betslip';
 
 // Betbuilder that showcases bookmakers and their odds for specific fixture
 function BetBuilder({ game, onConvertTime }) {
 
+    // Add these two lines near the top of the component, with other variable declarations
+    const homeTeam = game.teams.home.name;
+    const awayTeam = game.teams.away.name;
     // store gamestatus
     const gameStatus = game.fixture.status.short;
     // store fixture id
     const fixture_id = game.fixture.id;
     // state to store available markets
     const [markets, setMarkets] = useState([]);
-    
+    // state to store selected odds (lifted up due to re-rendering of marketaccordion)
+    const [selectedOdds, setSelectedOdds] = useState([]);
+    //State to manage betslip visibility and selected bet
+    const [betslipVisible, setBetslipVisible] = useState(false);
+
+    // Bookmaker list
+    const bookmakersList = [
+        "NordicBet",
+        "10Bet",
+        "William Hill",
+        "Bet365",
+        "Marathonbet",
+        "Unibet",
+        "Betfair",
+        "Betsson",
+        "Fonbet",
+        "Pinnacle",
+        "SBO",
+        "1xBet",
+        "Betano",
+        "Betway",
+        "Tipico",
+        "Dafabet"
+    ];
+
+    // Replace team names (helper function)
+    const replaceTeamNames = (value) => {
+        if (typeof value === 'string') {
+            return value
+                .replace(/Home/g, homeTeam)
+                .replace(/Away/g, awayTeam);
+        }
+        return value;
+    };
 
     // Fetch available markets and odds for the selected fixture
      useEffect(() => {
@@ -82,8 +119,13 @@ function BetBuilder({ game, onConvertTime }) {
                             <MarketAccordion 
                                 key={betType} 
                                 market={groupedBets[betType]} 
-                                homeTeam={game.teams.home.name} 
-                                awayTeam={game.teams.away.name} 
+                                selectedOdds = {selectedOdds}
+                                bookmakersList={bookmakersList}
+                                replaceTeamNames = {replaceTeamNames}
+                                setSelectedOdds={setSelectedOdds}
+                                setBetslipVisible={setBetslipVisible}
+                                homeTeam = {homeTeam}
+                                awayTeam = {awayTeam}
                             />
                         ))
                     ) : (
@@ -91,6 +133,13 @@ function BetBuilder({ game, onConvertTime }) {
                     )}
                 </div>
             </div>
+            {betslipVisible && (
+                <Betslip 
+                    selectedOdds={selectedOdds} 
+                    bookmakersList = {bookmakersList}
+                    replaceTeamNames = {replaceTeamNames}
+                />
+            )}
         </>
     )
 }

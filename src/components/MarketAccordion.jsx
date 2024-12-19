@@ -1,35 +1,31 @@
 import crown from '../assets/icons/crown.svg';
 
-function MarketAccordion({ market, homeTeam, awayTeam }) {
-    // Replace team names (helper function)
-    const replaceTeamNames = (value) => {
-        if (typeof value === 'string') {
-            return value
-                .replace(/Home/g, homeTeam)
-                .replace(/Away/g, awayTeam);
+function MarketAccordion({ market, homeTeam, awayTeam, selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersList, replaceTeamNames }) {
+
+    // Function to handle odd click and creating array with the selection and its bookmaker + odds
+    const handleOddClick = (value) => {
+        const oddsForValue = market.flatMap(bookmaker => 
+            bookmaker.values.filter(v => v.value === value).map(v => ({ 
+                bookmakerName: bookmaker.bookmakerName, 
+                odd: v.odd, 
+                bet: value,
+                market: market[0]?.name,
+                fixture: `${homeTeam} vs ${awayTeam}`
+            })));
+        
+        // Check if this bet already exists in any of the nested arrays
+        const betExists = selectedOdds.flat().some(odd => odd.bet === value);
+
+        // Only add the bet if it doesn't already exist
+        if (!betExists) {
+            setSelectedOdds(prevOdds => {
+                const newOdds = [...prevOdds, oddsForValue];
+                return newOdds;
+            });
+            setBetslipVisible(true);
         }
-        return value;
     };
 
-    // Bookmaker list
-    const bookmakersList = [
-        "NordicBet",
-        "10Bet",
-        "William Hill",
-        "Bet365",
-        "Marathonbet",
-        "Unibet",
-        "Betfair",
-        "Betsson",
-        "Fonbet",
-        "Pinnacle",
-        "SBO",
-        "1xBet",
-        "Betano",
-        "Betway",
-        "Tipico",
-        "Dafabet"
-    ];
 
     // Find the highest odd for each value
     const highestOdds = market.reduce((acc, bookmaker) => {
@@ -52,8 +48,7 @@ function MarketAccordion({ market, homeTeam, awayTeam }) {
                 <table className="table-fixed w-full border-collapse">
                     <thead>
                         <tr>
-                            <th className="p-1 text-sm w-1/4 border-b border-gray-200"></th>
-                            <th className="p-1 text-sm w-1/4 border-b border-gray-200"></th> {/* Empty column to offset */}
+                            <th className="p-1 text-sm w-2/4 border-b border-gray-200"></th>
                             {bookmakersList.map((bookmaker) => (
                                 <th key={bookmaker} className="p-1 text-sm w-1/4">
                                     <div className="h-28 flex items-center justify-center">
@@ -68,21 +63,20 @@ function MarketAccordion({ market, homeTeam, awayTeam }) {
                     <tbody>
                         {market[0]?.values.map((value) => (
                             <tr key={value.value}>
-                                <td className="p-1 text-sm border-b border-gray-200">
+                                <td className="p-1 text-sm w-2/4 border-b border-gray-200">
                                     {replaceTeamNames(value.value)}
                                 </td>
-                                <td className="p-1 text-sm border-b border-gray-200"></td> {/* Empty cell to offset */}
                                 {bookmakersList.map((bookmaker) => {
                                     const oddValue = market.find((b) => b.bookmakerName === bookmaker)?.values.find((v) => v.value === value.value);
                                     const isHighest = oddValue && parseFloat(oddValue.odd) === highestOdds[value.value];
                                     return (
                                         <td key={bookmaker} className="text-center text-sm w-1/4">
                                             {oddValue ? (
-                                                <div className="flex justify-center items-center w-full h-full relative">
+                                                <div className="flex justify-center items-center w-full h-full relative transition-transform transform hover:scale-10 hover:shadow-lg" onClick={() => handleOddClick(value.value)}>
                                                     {isHighest && (
                                                         <img src={crown} alt="Crown" className="absolute top-0 left-0 w-4 h-4 z-10" />
                                                     )}
-                                                    <div className={`bg-[#DFFAFF] rounded w-full h-full flex items-center justify-center shadow-md p-2 transition-transform transform hover:scale-110 hover:shadow-lg ${isHighest ? ' border-4 border-[#26FFBE]' : ''}`}>
+                                                    <div className={`bg-white rounded w-full h-full flex items-center justify-center shadow-sm p-2 ${isHighest ? 'border-4 border-[#26FFBE]' : ''}`}>
                                                         {oddValue.odd}
                                                     </div>
                                                 </div>
