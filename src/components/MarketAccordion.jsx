@@ -2,7 +2,7 @@ import crown from '../assets/icons/crown.svg';
 
 function MarketAccordion({ market, homeTeam, awayTeam, selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersList, replaceTeamNames }) {
 
-    // Function to handle odd click and creating array with the selection and its bookmaker + odds
+    // Function to add bet to bet (selectedOdd)
     const handleOddClick = (value) => {
         const oddsForValue = market.flatMap(bookmaker => 
             bookmaker.values.filter(v => v.value === value).map(v => ({ 

@@ -39,6 +39,22 @@ function BetBuilder({ game, onConvertTime }) {
         "Dafabet"
     ];
 
+
+    // Function to remove bet from betslip
+    const handleRemoveBet = (index) => {
+        setSelectedOdds(prevOdds => {
+            const newOdds = [...prevOdds];
+            newOdds.splice(index, 1);
+            
+            // Hide betslip if all bets are removed
+            if (newOdds.length === 0) {
+                setBetslipVisible(false);
+            }
+            
+            return newOdds;
+        });
+    };
+
     // Replace team names (helper function)
     const replaceTeamNames = (value) => {
         if (typeof value === 'string') {
@@ -138,6 +154,7 @@ function BetBuilder({ game, onConvertTime }) {
                     selectedOdds={selectedOdds} 
                     bookmakersList = {bookmakersList}
                     replaceTeamNames = {replaceTeamNames}
+                    handleRemoveBet = {handleRemoveBet}
                 />
             )}
         </>
