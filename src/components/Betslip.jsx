@@ -6,6 +6,7 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
 
     // State for betslip accordion
     const [isBetSlipOpen, setIsBetSlipOpen] = useState(true);
+    const [stakeAmount, setStakeAmount] = useState('');
 
     const handleBetSlipToggle = () => {
         setIsBetSlipOpen(!isBetSlipOpen);
@@ -54,7 +55,12 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                                         selectedOdds.map((betType, index) => (
                                             <tr key={`bet-${index}-${bookmakersList.join('-')}`}>
                                                 <td className="p-1 w-8">
-                                                    <img src={closeIcon} onClick={() => handleRemoveBet(index)} alt="Close" className="w-4 h-4" />
+                                                    <img 
+                                                        src={closeIcon} 
+                                                        onClick={() => handleRemoveBet(index)} 
+                                                        alt="Close" 
+                                                        className="w-5 h-5 cursor-pointer hover:opacity-70 hover:[filter:invert(15%)_sepia(95%)_saturate(6932%)_hue-rotate(359deg)_brightness(103%)_contrast(113%)] transition-all" 
+                                                    />
                                                 </td>
                                                 <td className="p-1 text-sm w-3/4">
                                                     <div className='text-sm font-bold'>
@@ -141,11 +147,34 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                                 </tbody>
                             </table>
                         </div>
+                        <div className="flex flex-col gap-2">
+                            <div className="flex justify-end items-center mt-4 pr-1">
+                                <input 
+                                    type="text"
+                                    placeholder="Stake" 
+                                    value={stakeAmount ? Number(stakeAmount).toLocaleString() : ''}
+                                    onChange={(e) => {
+                                        const value = e.target.value.replace(/,/g, '');
+                                        // Only update if empty or valid number
+                                        if (value === '' || (!isNaN(value) && parseFloat(value) >= 0)) {
+                                            setStakeAmount(value);
+                                        }
+                                    }}
+                                    className="input bg-white border-black border w-full max-w-xs text-right placeholder:text-right pr-8" 
+                                />
+                            </div>
+                        </div>
                     </div>
+                    {stakeAmount && (
+                        <div className="bg-[#26FFBE] p-6 rounded-lg font-bold mt-4 flex justify-between items-center">
+                            <div className="flex items-center gap-4">
+                                <span>Place bet</span>
+                                <span>{Number(stakeAmount).toLocaleString()}</span>
+                            </div>
+                            <span>Potential returns: </span>
+                        </div>
+                    )}
                 </div>
-                {/* <div className="flex justify-center items-center">
-                    <button className="btn btn-primary">Place bet</button>
-                </div> */}      
             </div>
         </div>
     );
