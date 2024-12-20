@@ -48,7 +48,7 @@ function MarketAccordion({ market, homeTeam, awayTeam, selectedOdds, setSelected
                 <table className="table-fixed w-full border-collapse">
                     <thead>
                         <tr>
-                            <th className="p-1 text-sm w-2/4 border-b border-gray-200"></th>
+                            <th className="p-1 text-sm w-3/4 border-b border-gray-200"></th>
                             {bookmakersList.map((bookmaker) => (
                                 <th key={bookmaker} className="p-1 text-sm w-1/4">
                                     <div className="h-28 flex items-center justify-center">
@@ -63,7 +63,7 @@ function MarketAccordion({ market, homeTeam, awayTeam, selectedOdds, setSelected
                     <tbody>
                         {market[0]?.values.map((value) => (
                             <tr key={value.value}>
-                                <td className="p-1 text-sm w-2/4 border-b border-gray-200">
+                                <td className="p-1 text-sm w-3/4 border-b border-gray-200">
                                     {replaceTeamNames(value.value)}
                                 </td>
                                 {bookmakersList.map((bookmaker) => {
