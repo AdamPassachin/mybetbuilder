@@ -1,68 +1,39 @@
 import { useEffect, useState } from 'react';
 import MarketAccordion from './MarketAccordion';
-import Betslip from './Betslip';
+import { MARKET_CATEGORIES } from '../constants/marketCategories';
 
 // Betbuilder that showcases bookmakers and their odds for specific fixture
-function BetBuilder({ game, onConvertTime }) {
+function BetBuilder({ game, onConvertTime, selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersList, replaceTeamNames }) {
 
-    // Add these two lines near the top of the component, with other variable declarations
+    // Constant to store team names
     const homeTeam = game.teams.home.name;
     const awayTeam = game.teams.away.name;
-    // store gamestatus
+    // Constant to store game status
     const gameStatus = game.fixture.status.short;
-    // store fixture id
+    // Constant to store fixture id
     const fixture_id = game.fixture.id;
-    // state to store available markets
+    // State to store available markets
     const [markets, setMarkets] = useState([]);
-    // state to store selected odds (lifted up due to re-rendering of marketaccordion)
-    const [selectedOdds, setSelectedOdds] = useState([]);
-    //State to manage betslip visibility and selected bet
-    const [betslipVisible, setBetslipVisible] = useState(false);
-
-    // Bookmaker list
-    const bookmakersList = [
-        "NordicBet",
-        "10Bet",
-        "William Hill",
-        "Bet365",
-        "Marathonbet",
-        "Unibet",
-        "Betfair",
-        "Betsson",
-        "Fonbet",
-        "Pinnacle",
-        "SBO",
-        "1xBet",
-        "Betano",
-        "Betway",
-        "Tipico",
-        "Dafabet"
-    ];
+    // Store to store filter selection for market
+    const [filterSelection, setFilterSelection] = useState(MARKET_CATEGORIES.ALL);
 
 
-    // Function to remove bet from betslip
-    const handleRemoveBet = (index) => {
-        setSelectedOdds(prevOdds => {
-            const newOdds = [...prevOdds];
-            newOdds.splice(index, 1);
-            
-            // Hide betslip if all bets are removed
-            if (newOdds.length === 0) {
-                setBetslipVisible(false);
-            }
-            
-            return newOdds;
-        });
-    };
-
-    // Replace team names (helper function)
-    const replaceTeamNames = (value) => {
-        if (typeof value === 'string') {
-            return value
-                .replace(/Home/g, homeTeam)
-                .replace(/Away/g, awayTeam);
+    // Function to filter markets based on category
+    const filterMarkets = (betType) => {
+        switch (filterSelection) {
+            case MARKET_CATEGORIES.ALL:
+                return true; 
+            case MARKET_CATEGORIES.POPULAR:
+                return POPULAR_MARKETS.includes(betType);
+            case MARKET_CATEGORIES.WIN:
+                return WIN_MARKETS.includes(betType);
+            case MARKET_CATEGORIES.PLAYER:
+                return PLAYER_MARKETS.includes(betType);
+            case MARKET_CATEGORIES.SCORE:
+                return SCORE_MARKETS.includes(betType);
+            default:
+                return true;
         }
-        return value;
     };
 
     // Fetch available markets and odds for the selected fixture
@@ -98,7 +69,6 @@ function BetBuilder({ game, onConvertTime }) {
                 });
             });
         });
-
         return groupedBets;
     };
 
@@ -149,14 +119,6 @@ function BetBuilder({ game, onConvertTime }) {
                     )}
                 </div>
             </div>
-            {betslipVisible && (
-                <Betslip 
-                    selectedOdds={selectedOdds} 
-                    bookmakersList = {bookmakersList}
-                    replaceTeamNames = {replaceTeamNames}
-                    handleRemoveBet = {handleRemoveBet}
-                />
-            )}
         </>
     )
 }

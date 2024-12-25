@@ -1,20 +1,77 @@
 import crown from '../assets/icons/crown.svg';
 import closeIcon from '../assets/icons/close-button.svg';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveBet }) => {
 
     // State for betslip accordion
     const [isBetSlipOpen, setIsBetSlipOpen] = useState(true);
+
+    // State for stake amount
     const [stakeAmount, setStakeAmount] = useState('');
 
+    // State for selected bookmaker and its odds
+    const [selectedBookmaker, setSelectedBookmaker] = useState(null);
+    const [selectedTotalOdds, setSelectedTotalOdds] = useState(null);
+
+    const [userCurrency, setUserCurrency] = useState('USD'); // Default currency
+
+    // Detect user's currency from IP
+    useEffect(() => {
+        fetch('https://ipapi.co/currency/')
+            .then(response => response.text())
+            .then(currency => {
+                // Validate that the currency is a 3-letter code
+                const validCurrency = /^[A-Z]{3}$/.test(currency) ? currency : 'USD';
+                setUserCurrency(validCurrency);
+            })
+            .catch(() => {
+                setUserCurrency('USD');
+            });
+    }, []);
+
+    // Helper function for currency formatting
+    const formatCurrency = (amount) => {
+        try {
+            return new Intl.NumberFormat(undefined, {
+                style: 'currency',
+                currency: userCurrency,
+            }).format(amount);
+        } catch (error) {
+            // Fallback to USD if there's any formatting error
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+            }).format(amount);
+        }
+    };
+
+    // Function to toggle betslip accordion
     const handleBetSlipToggle = () => {
         setIsBetSlipOpen(!isBetSlipOpen);
     };
 
+    // Function to handle bookmaker selection and calculate total odds
+    const handleBookmakerSelect = (bookmaker) => {
+        setSelectedBookmaker(bookmaker === selectedBookmaker ? null : bookmaker);
+
+        if(bookmaker !== selectedBookmaker){
+            const totalOdds = selectedOdds.reduce((total, betType) => {
+                const oddValue = betType.find((odd) => odd.bookmakerName === bookmaker);
+                return total * (oddValue ? parseFloat(oddValue.odd) : 1);
+            }, 1);
+            setSelectedTotalOdds(totalOdds);
+        } else {
+            setSelectedTotalOdds(null);
+        }
+    };
 
     return (
-        <div className="fixed bottom-10 left-40 right-40 rounded-lg bg-[#CFCFCF] border-t border-gray-200 z-50 overflow-hidden p-4">
+        <div className={`fixed ${
+            isBetSlipOpen 
+                ? 'bottom-10 left-40 right-40' 
+                : 'bottom-10 left-1/2 -translate-x-1/2 w-[350px]'
+                } rounded-lg bg-[#CFCFCF] border-t border-gray-200 z-50 overflow-hidden p-4`}>
             <div className="collapse collapse-arrow">
                 <input 
                     type="checkbox" 
@@ -33,7 +90,7 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                 </div>
                 <div className="collapse-content">
                     <div className="bg-[#D9D9D9] rounded-lg p-4">
-                        <div className="max-h-[500px] overflow-y-auto">
+                        <div className="max-h-[400px] overflow-y-auto">
                             <table className="table-fixed w-full border-collapse">
                                 <thead>
                                     <tr>
@@ -41,11 +98,18 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                                         <th className="p-1 text-sm w-3/4"></th>
                                         {bookmakersList.map((bookmaker) => (
                                         <th key={bookmaker} className="p-1 text-sm w-1/4">
-                                            <div className="h-28 flex items-center justify-center">
-                                                <span className="block whitespace-nowrap transform text-center mx-auto px-4 rotate-90">
+                                            <button 
+                                                className={`h-28 w-full flex items-center justify-center ${
+                                                    selectedBookmaker === bookmaker 
+                                                        ? 'bg-gray-300 border-black' 
+                                                        : 'bg-white border-gray-200 hover:bg-gray-100 hover:border-gray-300'
+                                                } rounded-lg shadow-sm transition-colors duration-75 border active:bg-gray-300`}
+                                                onClick={() => handleBookmakerSelect(bookmaker)}
+                                            >
+                                                <span className="block whitespace-nowrap transform text-center mx-auto px-4 rotate-90 font-medium text-gray-700">
                                                     {bookmaker}
                                                 </span>
-                                            </div>
+                                            </button>
                                         </th>
                                         ))}
                                     </tr>
@@ -147,11 +211,16 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                                 </tbody>
                             </table>
                         </div>
+                        {/* Stake amount input */}
                         <div className="flex flex-col gap-2">
                             <div className="flex justify-end items-center mt-4 pr-1">
                                 <input 
                                     type="text"
-                                    placeholder="Stake" 
+                                    placeholder={
+                                        selectedBookmaker 
+                                            ? (selectedTotalOdds > 1 ? "Stake" : "No available odds")
+                                            : "Select a bookmaker"
+                                    } 
                                     value={stakeAmount ? Number(stakeAmount).toLocaleString() : ''}
                                     onChange={(e) => {
                                         const value = e.target.value.replace(/,/g, '');
@@ -165,13 +234,13 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                             </div>
                         </div>
                     </div>
-                    {stakeAmount && (
-                        <div className="bg-[#26FFBE] p-6 rounded-lg font-bold mt-4 flex justify-between items-center">
+                    {stakeAmount && selectedTotalOdds && selectedTotalOdds > 1 && (
+                        <div className="bg-[#26FFBE] p-6 rounded-lg font-bold mt-4 flex justify-between items-center hover:bg-[#1ee5aa] active:bg-[#1ad199] cursor-pointer transition-all">
                             <div className="flex items-center gap-4">
                                 <span>Place bet</span>
-                                <span>{Number(stakeAmount).toLocaleString()}</span>
+                                <span>{formatCurrency(Number(stakeAmount))}</span>
                             </div>
-                            <span>Potential returns: </span>
+                            <span>Potential returns: {formatCurrency(Number(stakeAmount) * selectedTotalOdds)}</span>
                         </div>
                     )}
                 </div>

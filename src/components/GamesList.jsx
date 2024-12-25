@@ -1,6 +1,5 @@
 import React from 'react';
 import GameItem from './GameItem';
-import GameDayHeader from './GameDayHeader';
 import { useState, useEffect } from 'react';
 
 
@@ -56,23 +55,35 @@ function GamesList({ onGameItemClick, currentGameweek, onConvertTime}) {
 
     return (
         <>
-            {currentGames.map((game, index) => {
-                const currentGameDate = ConvertDateHeader(game.fixture.date);
-                const showHeader = index === 0 || currentGameDate !== ConvertDateHeader(currentGames[index - 1].fixture.date);
-                
-                return (
-                    <React.Fragment key={game.fixture.id}>
-                        <div className='flex flex-col w-full'>
-                          {showHeader && (
-                            <GameDayHeader gameDate={currentGameDate} />
-                          )}
-                          <div className='flex items-center justify-between w-full cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-400 active:bg-gray-700 transform active:scale-95' onClick={() => onGameItemClick(game)}>
-                            <GameItem game={game} onConvertTime={onConvertTime}/>
-                          </div>
-                        </div>
-                    </React.Fragment>
-                );
-            })} 
+            <div className='flex justify-between items-center'>
+                <p className='text-lg font-semibold m-1'>English Premier League 24/25</p>
+                <p className='text-lg font-semibold m-1'>Gameweek {currentGameweek}</p>
+            </div>
+            <div className='flex justify-start'>
+                <img src='/PL-logo.png' alt='league-logo' className='h-11 w-11' />
+            </div>
+            <div className='bg-white rounded-md p-4 mt-4 flex flex-col h-auto'>
+                {currentGames.map((game, index) => {
+                    const currentGameDate = ConvertDateHeader(game.fixture.date);
+                    const showHeader = index === 0 || currentGameDate !== ConvertDateHeader(currentGames[index - 1].fixture.date);
+                    
+                    return (
+                        <React.Fragment key={game.fixture.id}>
+                            <div className='flex flex-col w-full'>
+                              {showHeader && (
+                                 <div className="flex flex-col p-1 mb-2 rounded-lg">
+                                    <p className="text-base">{currentGameDate}</p>
+                                    <div className="h-0.5 w-full opacity-50 bg-gray-300 mb-1"></div>
+                                </div>
+                              )}
+                              <div className='flex items-center justify-between w-full cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-400 active:bg-gray-700 transform active:scale-95' onClick={() => onGameItemClick(game)}>
+                                <GameItem game={game} onConvertTime={onConvertTime}/>
+                              </div>
+                            </div>
+                        </React.Fragment>
+                    );
+                })} 
+            </div>
         </>
     );
 };
