@@ -31,6 +31,10 @@ function BetBuilder({ game, onConvertTime, selectedOdds, setSelectedOdds, setBet
                 return PLAYER_MARKETS.includes(betType);
             case MARKET_CATEGORIES.SCORE:
                 return SCORE_MARKETS.includes(betType);
+            case MARKET_CATEGORIES.HANDICAP:
+                return HANDICAP_MARKETS.includes(betType);
+            case MARKET_CATEGORIES.STATS:
+                return STATS_MARKETS.includes(betType);
             default:
                 return true;
         }
