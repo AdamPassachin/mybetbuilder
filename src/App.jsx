@@ -28,6 +28,12 @@ function App() {
       "Dafabet"
   ];
 
+  // Days of the week
+  const daysOfWeek = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+  // Months of the year
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
   // State to control the visibility of the betbuilder 
   const [showBetBuilder, setShowBetBuilder] = useState(false);
 
@@ -52,6 +58,26 @@ function App() {
     }
     return value;
 };
+
+//Function to convert and format the date 
+function convertDateHeader(fullDate){
+  const date = new Date(fullDate);
+  const day = date.getDay();
+  const dateDay = date.getDate();
+  const month = date.getMonth();
+
+  // Determine the ordinal suffix
+  const suffix = (dateDay) => {
+      if (dateDay > 3 && dateDay < 21) return 'th'; // Catch 11th-13th
+      switch (dateDay % 10) {
+          case 1: return 'st';
+          case 2: return 'nd';
+          case 3: return 'rd';
+          default: return 'th';
+      }
+  };
+  return `${daysOfWeek[day]}, ${dateDay}${suffix(dateDay)} ${months[month]}`;
+}
 
   // Convert the date to a more readable format in hours and minutes
   function convertTime(fullDate) {
@@ -120,7 +146,8 @@ function App() {
                   <GamesList 
                     currentGameweek={currentGameweek} 
                     onGameItemClick={handleShowBetBuilderSection} 
-                    onConvertTime={convertTime}  
+                    onConvertTime={convertTime}
+                    convertDateHeader={convertDateHeader}
                   />    
                 </>
               ) : (
@@ -132,7 +159,8 @@ function App() {
           )}
           {showBetBuilder && 
             <BetBuilder 
-              game={selectedGame} 
+              game={selectedGame}
+              gameweek={currentGameweek}
               onConvertTime={convertTime}
               selectedOdds={selectedOdds}
               setSelectedOdds={setSelectedOdds}
@@ -140,6 +168,7 @@ function App() {
               setBetslipVisible={setBetslipVisible}
               bookmakersList={bookmakersList}
               replaceTeamNames={(value) => replaceTeamNames(value, selectedGame.teams.home.name, selectedGame.teams.away.name)}
+              convertDateHeader={convertDateHeader}
             />
           }
           {betslipVisible && (

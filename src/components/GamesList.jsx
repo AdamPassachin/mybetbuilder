@@ -4,17 +4,11 @@ import { useState, useEffect } from 'react';
 
 
 // GamesList component for the games list. We make api call here and pass the data to the Game component. Create row for each game.
-function GamesList({ onGameItemClick, currentGameweek, onConvertTime}) {
-
-    // Days of the week
-    const daysOfWeek = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-    // Months of the year
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+function GamesList({ onGameItemClick, currentGameweek, onConvertTime, convertDateHeader, daysOfWeek, months }) {
 
     const [currentGames, setCurrentGames] = useState([]);
 
-    // Fetch current fixture for current gameweek
+    // Fetch current fixtures for current gameweek
     useEffect(() => {
       const fetchGames = async () => {
         try {
@@ -33,39 +27,31 @@ function GamesList({ onGameItemClick, currentGameweek, onConvertTime}) {
       fetchGames();
     }, [currentGameweek]);
 
-    //Function to convert and format the date for the header
-    function ConvertDateHeader(fullDate){
-        const date = new Date(fullDate);
-        const day = date.getDay();
-        const dateDay = date.getDate();
-        const month = date.getMonth();
-
-        // Determine the ordinal suffix
-        const suffix = (dateDay) => {
-            if (dateDay > 3 && dateDay < 21) return 'th'; // Catch 11th-13th
-            switch (dateDay % 10) {
-                case 1: return 'st';
-                case 2: return 'nd';
-                case 3: return 'rd';
-                default: return 'th';
-            }
-        };
-        return `${daysOfWeek[day]}, ${dateDay}${suffix(dateDay)} ${months[month]}`;
-    }
 
     return (
         <>
             <div className='flex justify-between items-center'>
-                <p className='text-lg font-semibold m-1'>English Premier League 24/25</p>
+                <div className='flex items-center gap-2'>
+                    {currentGames.length > 0 && (
+                        <>
+                            <p className='text-lg font-semibold m-1'>
+                                {currentGames[0].league.name} {`${currentGames[0].league.season.toString().slice(-2)}/${(currentGames[0].league.season + 1).toString().slice(-2)}`}
+                            </p>
+                            <img src={currentGames[0].league.flag} alt='league-logo' className='h-6 w-6' />
+                        </>
+                    )}
+                </div>
                 <p className='text-lg font-semibold m-1'>Gameweek {currentGameweek}</p>
             </div>
             <div className='flex justify-start'>
-                <img src='/PL-logo.png' alt='league-logo' className='h-11 w-11' />
+                {currentGames.length > 0 && (
+                    <img src={currentGames[0].league.logo} alt='league-logo' className='h-11 w-11' />
+                )}
             </div>
             <div className='bg-white rounded-md p-4 mt-4 flex flex-col h-auto'>
                 {currentGames.map((game, index) => {
-                    const currentGameDate = ConvertDateHeader(game.fixture.date);
-                    const showHeader = index === 0 || currentGameDate !== ConvertDateHeader(currentGames[index - 1].fixture.date);
+                    const currentGameDate = convertDateHeader(game.fixture.date);
+                    const showHeader = index === 0 || currentGameDate !== convertDateHeader(currentGames[index - 1].fixture.date);
                     
                     return (
                         <React.Fragment key={game.fixture.id}>

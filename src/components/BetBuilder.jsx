@@ -1,9 +1,20 @@
 import { useEffect, useState } from 'react';
 import MarketAccordion from './MarketAccordion';
-import { MARKET_CATEGORIES } from '../constants/marketCategories';
+import { 
+    MARKET_CATEGORIES, 
+    POPULAR_MARKETS, 
+    WIN_MARKETS, 
+    PLAYER_MARKETS,
+    SCORE_MARKETS,
+    HANDICAP_MARKETS,
+    STATS_MARKETS,
+    GOALS_MARKETS,
+    OTHER_MARKETS
+} from '../constants/marketCategories';
 
 // Betbuilder that showcases bookmakers and their odds for specific fixture
-function BetBuilder({ game, onConvertTime, selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersList, replaceTeamNames }) {
+function BetBuilder({ game, gameweek, onConvertTime, selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersList, replaceTeamNames, convertDateHeader }) {
+    console.log(game);
 
     // Constant to store team names
     const homeTeam = game.teams.home.name;
@@ -35,6 +46,10 @@ function BetBuilder({ game, onConvertTime, selectedOdds, setSelectedOdds, setBet
                 return HANDICAP_MARKETS.includes(betType);
             case MARKET_CATEGORIES.STATS:
                 return STATS_MARKETS.includes(betType);
+            case MARKET_CATEGORIES.GOALS:
+                return GOALS_MARKETS.includes(betType);
+            case MARKET_CATEGORIES.OTHER:
+                return OTHER_MARKETS.includes(betType);
             default:
                 return true;
         }
@@ -59,7 +74,8 @@ function BetBuilder({ game, onConvertTime, selectedOdds, setSelectedOdds, setBet
         fetchMarkets();
       }, [fixture_id]);
 
-    // Function to group bets by their name
+
+    // Function to group bets by bet type
     const groupBetsByType = (markets) => {
         const groupedBets = {};
 
@@ -81,7 +97,20 @@ function BetBuilder({ game, onConvertTime, selectedOdds, setSelectedOdds, setBet
     return (
         <>
             <div className="flex flex-col bg-gray-300 p-5 mt-4 rounded-lg">
-                <div className='flex items-center justify-center mb-10'>
+                <div className='flex items-center justify-center mb-10 relative'>
+                    <div className='absolute top-0 right-0 text-sm text-gray-600'>
+                        <div className='flex items-center'>
+                            <img 
+                                className='w-4 h-4 mr-1' 
+                                src={game.league.flag} 
+                                alt={`${game.league.name} logo`} 
+                            />
+                            <p>{game.league.name} - Gameweek {gameweek || 'N/A'}</p>
+                        </div>
+                        <p>Venue: {game.fixture.venue.name || 'N/A'}</p>
+                        <p>Referee: {game.fixture.referee || 'N/A'}</p>
+                    </div>
+                    
                     <div className='text-center'>
                         <img className='w-12 h-12 mx-auto' src={game.teams.home.logo} alt={`${game.teams.home.name} logo`} />
                         <p className='text-lg my-1'>{game.teams.home.name}</p>
@@ -97,27 +126,49 @@ function BetBuilder({ game, onConvertTime, selectedOdds, setSelectedOdds, setBet
                         <span className='text-xl'>
                             {gameStatus === "FT" ? "FT" :  gameStatus === "1H" || gameStatus === "2H" || gameStatus === "HT"  ? "Live": onConvertTime(game.fixture.date)}
                         </span>
+                        <span className='text-sm text-gray-600'>
+                            {convertDateHeader(game.fixture.date)}
+                        </span>
                     </div>
                     <div className='text-center'>
                         <img className='w-12 h-12 mx-auto' src={game.teams.away.logo} alt={`${game.teams.away.name} logo`} />
                         <p className='text-lg my-1'>{game.teams.away.name}</p>
                     </div>
                 </div>
+
+                <div className="flex flex-wrap gap-2 mb-4">
+                    {Object.values(MARKET_CATEGORIES).map((category) => (
+                        <button
+                            key={category}
+                            className={`px-4 py-2 rounded-full ${
+                                filterSelection === category
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                            }`}
+                            onClick={() => setFilterSelection(category)}
+                        >
+                            {category}
+                        </button>
+                    ))}
+                </div>
+
                 <div className='bg-white rounded p-4'>
                     {Object.keys(groupedBets).length > 0 ? (
-                        Object.keys(groupedBets).map(betType => (
-                            <MarketAccordion 
-                                key={betType} 
-                                market={groupedBets[betType]} 
-                                selectedOdds = {selectedOdds}
-                                bookmakersList={bookmakersList}
-                                replaceTeamNames = {replaceTeamNames}
-                                setSelectedOdds={setSelectedOdds}
-                                setBetslipVisible={setBetslipVisible}
-                                homeTeam = {homeTeam}
-                                awayTeam = {awayTeam}
-                            />
-                        ))
+                        Object.keys(groupedBets)
+                            .filter(filterMarkets)
+                            .map(betType => (
+                                <MarketAccordion 
+                                    key={betType}
+                                    market={groupedBets[betType]}
+                                    selectedOdds = {selectedOdds}
+                                    bookmakersList={bookmakersList}
+                                    replaceTeamNames = {replaceTeamNames}
+                                    setSelectedOdds={setSelectedOdds}
+                                    setBetslipVisible={setBetslipVisible}
+                                    homeTeam = {homeTeam}
+                                    awayTeam = {awayTeam}
+                                />
+                            ))
                     ) : (
                         <span className="loading loading-dots loading-md"></span>
                     )}

@@ -101,7 +101,7 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                                             <button 
                                                 className={`h-28 w-full flex items-center justify-center ${
                                                     selectedBookmaker === bookmaker 
-                                                        ? 'bg-gray-300 border-black' 
+                                                        ? 'bg-gray-300' 
                                                         : 'bg-white border-gray-200 hover:bg-gray-100 hover:border-gray-300'
                                                 } rounded-lg shadow-sm transition-colors duration-75 border active:bg-gray-300`}
                                                 onClick={() => handleBookmakerSelect(bookmaker)}
