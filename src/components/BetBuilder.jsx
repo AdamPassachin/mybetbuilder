@@ -14,7 +14,6 @@ import {
 
 // Betbuilder that showcases bookmakers and their odds for specific fixture
 function BetBuilder({ game, gameweek, onConvertTime, selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersList, replaceTeamNames, convertDateHeader }) {
-    console.log(game);
 
     // Constant to store team names
     const homeTeam = game.teams.home.name;

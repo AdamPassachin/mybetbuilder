@@ -10,7 +10,9 @@ function MarketAccordion({ market, homeTeam, awayTeam, selectedOdds, setSelected
                 odd: v.odd, 
                 bet: value,
                 market: market[0]?.name,
-                fixture: `${homeTeam} vs ${awayTeam}`
+                fixture: `${homeTeam} vs ${awayTeam}`,
+                homeTeam,
+                awayTeam
             })));
         
         // Check if this bet already exists in any of the nested arrays

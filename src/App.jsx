@@ -174,8 +174,9 @@ function convertDateHeader(fullDate){
           {betslipVisible && (
             <Betslip 
               selectedOdds={selectedOdds}
+              selectedGame={selectedGame}
               bookmakersList={bookmakersList}
-              replaceTeamNames={(value) => replaceTeamNames(value, selectedGame.teams.home.name, selectedGame.teams.away.name)}
+              replaceTeamNames={replaceTeamNames}
               handleRemoveBet={handleRemoveBet}
             />
           )}

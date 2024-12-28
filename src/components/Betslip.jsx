@@ -127,9 +127,13 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                                                     />
                                                 </td>
                                                 <td className="p-1 text-sm w-3/4">
-                                                    <div className='text-sm font-bold'>
-                                                        {replaceTeamNames(betType[0].bet)}  
-                                                    </div>
+                                                        <div className='text-sm font-bold'>
+                                                            {replaceTeamNames(
+                                                                betType[0].bet,
+                                                                betType[0].homeTeam,
+                                                                betType[0].awayTeam
+                                                            )}  
+                                                        </div>
                                                     <div className="text-sm">
                                                         {betType[0].market}
                                                     </div>
