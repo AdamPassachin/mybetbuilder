@@ -4,6 +4,11 @@ function MarketAccordion({ market, homeTeam, awayTeam, selectedOdds, setSelected
 
     // Function to add bet to bet (selectedOdd)
     const handleOddClick = (value) => {
+        // Check if any existing bet is from the same market
+        const sameMarketExists = selectedOdds.some(betGroup => 
+            betGroup[0].market === market[0]?.name
+        );
+        
         const oddsForValue = market.flatMap(bookmaker => 
             bookmaker.values.filter(v => v.value === value).map(v => ({ 
                 bookmakerName: bookmaker.bookmakerName, 
@@ -12,14 +17,20 @@ function MarketAccordion({ market, homeTeam, awayTeam, selectedOdds, setSelected
                 market: market[0]?.name,
                 fixture: `${homeTeam} vs ${awayTeam}`,
                 homeTeam,
-                awayTeam
+                awayTeam,
+                error: sameMarketExists
             })));
-        
-        // Check if this bet already exists in any of the nested arrays
-        const betExists = selectedOdds.flat().some(odd => odd.bet === value);
 
-        // Only add the bet if it doesn't already exist
-        if (!betExists) {
+        if (sameMarketExists) {
+            // If there's already a bet from this market, update all existing bets from this market to show error
+            const updatedOdds = selectedOdds.map(betGroup => {
+                if (betGroup[0].market === market[0]?.name) {
+                    return betGroup.map(bet => ({ ...bet, error: true }));
+                }
+                return betGroup;
+            });
+            setSelectedOdds(updatedOdds);
+        } else {
             setSelectedOdds(prevOdds => {
                 const newOdds = [...prevOdds, oddsForValue];
                 return newOdds;

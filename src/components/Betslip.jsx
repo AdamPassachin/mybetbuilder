@@ -16,6 +16,9 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
 
     const [userCurrency, setUserCurrency] = useState('USD'); // Default currency
 
+    // State to track which errors should be hidden
+    const [hiddenErrors, setHiddenErrors] = useState(new Set());
+
     // Detect user's currency from IP
     useEffect(() => {
         fetch('https://ipapi.co/currency/')
@@ -65,6 +68,20 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
             setSelectedTotalOdds(null);
         }
     };
+
+
+    // Existing useEffect for error timing
+    useEffect(() => {
+        selectedOdds.forEach((betType, index) => {
+            if (betType[0].error && !hiddenErrors.has(index)) {
+                const timer = setTimeout(() => {
+                    setHiddenErrors(prev => new Set([...prev, index]));
+                }, 3000);
+
+                return () => clearTimeout(timer);
+            }
+        });
+    }, [selectedOdds, hiddenErrors]);
 
     return (
         <div className={`fixed ${
@@ -140,6 +157,11 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                                                     <div className="text-xs text-gray-500">
                                                         {betType[0].fixture}
                                                     </div>
+                                                    {betType[0].error && !hiddenErrors.has(index) && (
+                                                        <div className="text-xs text-red-500 mt-1">
+                                                            Can not combine bets from the same market
+                                                        </div>
+                                                    )}
                                                 </td>
                                                 {bookmakersList.map((bookmaker) => {
                                                     const oddValue = betType.find((odd) => odd.bookmakerName === bookmaker);
@@ -238,15 +260,17 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                             </div>
                         </div>
                     </div>
-                    {stakeAmount && selectedTotalOdds && selectedTotalOdds > 1 && (
-                        <div className="bg-[#26FFBE] p-6 rounded-lg font-bold mt-4 flex justify-between items-center hover:bg-[#1ee5aa] active:bg-[#1ad199] cursor-pointer transition-all">
-                            <div className="flex items-center gap-4">
-                                <span>Place bet</span>
-                                <span>{formatCurrency(Number(stakeAmount))}</span>
+                    <div className="flex justify-between items-center mt-4">
+                        {stakeAmount && selectedTotalOdds && selectedTotalOdds > 1 && (
+                            <div className="bg-[#26FFBE] p-6 rounded-lg font-bold flex justify-between items-center hover:bg-[#1ee5aa] active:bg-[#1ad199] cursor-pointer transition-all flex-1 ml-4">
+                                <div className="flex items-center gap-4">
+                                    <span>Place bet</span>
+                                    <span>{formatCurrency(Number(stakeAmount))}</span>
+                                </div>
+                                <span>Potential returns: {formatCurrency(Number(stakeAmount) * selectedTotalOdds)}</span>
                             </div>
-                            <span>Potential returns: {formatCurrency(Number(stakeAmount) * selectedTotalOdds)}</span>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
