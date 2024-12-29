@@ -4,6 +4,7 @@ import GamesList from './components/GamesList'
 import BetBuilder from './components/BetBuilder'
 import chevronLeft from './assets/icons/chevron-left.svg'
 import Betslip from './components/Betslip'
+import check from './assets/icons/check.svg'
 
 
 function App() {
@@ -48,6 +49,30 @@ function App() {
 
   // State to store betslip visibility
   const [betslipVisible, setBetslipVisible] = useState(false);
+
+  // Add state for popup
+  const [showPopup, setShowPopup] = useState(true);
+
+  // Add new state for visible items
+  const [visibleItems, setVisibleItems] = useState(0);
+
+  // Add list of features
+  const features = [
+    "Choose any Premier League fixture",
+    "Create your BetBuilder by combining top markets from selected events into one bet",
+    "Compare odds between Bet365, Unibet, William Hill and many more...",
+    "Place your bets directly to secure the best pre-game odds"
+  ];
+
+  // Add useEffect for animation
+  useEffect(() => {
+    if (showPopup && visibleItems < features.length) {
+      const timer = setTimeout(() => {
+        setVisibleItems(prev => prev + 1);
+      }, 800); // Delay between each item
+      return () => clearTimeout(timer);
+    }
+  }, [showPopup, visibleItems]);
 
   // Replace team names (helper function)
   const replaceTeamNames = (value, homeTeam, awayTeam) => {
@@ -131,6 +156,43 @@ function convertDateHeader(fullDate){
 
   return (
     <>
+      {/* Popup/Modal */}
+      {showPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-[100] flex items-center justify-center">
+          <div className="bg-white p-8 rounded-lg shadow-xl max-w-4xl w-[90%] min-h-[400px] flex flex-col justify-between">
+            <div>
+              <h2 className="text-3xl font-bold mb-6 flex items-center gap-2">
+                Welcome to MyBetBuilder!
+                <span className="text-sm bg-yellow-300 px-2 py-1 rounded-lg font-mono transform -rotate-3">beta</span>
+              </h2>
+              <ul className="space-y-4">
+                {features.map((feature, index) => (
+                  <li
+                    key={index}
+                    className={`flex items-center space-x-3 transition-all duration-500 ${
+                      index < visibleItems ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'
+                    }`}
+                  >
+                    <img 
+                      src={check} 
+                      alt="check" 
+                      className="w-6 h-6"
+                    />
+                    <span className="text-lg">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <button
+              onClick={() => setShowPopup(false)}
+              className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 text-lg w-fit ml-auto"
+            >
+              Start your betbuilder now!
+            </button>
+          </div>
+        </div>
+      )}
+
       <Navbar/>
       <div className='w-screen flex justify-center'>
         <div className='w-[90vw] flex flex-col p-4 my-40 border-none bg-gray-200 rounded-md min-h-[600px] shadow-md'>
