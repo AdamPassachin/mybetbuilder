@@ -1,9 +1,9 @@
-import x from '../assets/icons/icons8-x.svg';
+import x from '../assets/icons/x.svg';
 import email from '../assets/icons/email.svg';
 
 function Footer() {
     return (
-        <footer className="footer bg-white text-neutral-600 p-10 border-t">
+        <footer id='footer' className="footer bg-white text-neutral-600 p-10 border-t">
             <div className="max-w-4xl mx-auto w-full">
                 {/* Main content container with flex */}
                 <div className="flex justify-between items-start gap-x-64">
@@ -21,9 +21,9 @@ function Footer() {
                     </div>
                     
                     {/* Right side content */}
-                    <div className="text-right">
+                    <div>
                         <h6 className="footer-title">Contact</h6>
-                        <div className="flex items-center space-x-4">
+                        <div className="flex justify-start items-center space-x-4">
                             <a href="https://x.com/adampassachin" target="_blank" rel="noopener noreferrer">
                                 <img className="h-6" src={x} alt="X Icon" />
                             </a>

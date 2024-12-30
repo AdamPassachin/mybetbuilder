@@ -194,7 +194,7 @@ function convertDateHeader(fullDate){
           </div>
         </div>
       )}
-
+      {/* Navbar */}
       <Navbar/>
       <div className='w-screen flex justify-center'>
         <div className='w-[90vw] flex flex-col'>
@@ -208,6 +208,7 @@ function convertDateHeader(fullDate){
               <>
                 {currentGameweek ? (
                   <>
+                    {/* GamesList */}
                     <GamesList 
                       currentGameweek={currentGameweek} 
                       onGameItemClick={handleShowBetBuilderSection} 
@@ -222,6 +223,7 @@ function convertDateHeader(fullDate){
                 )}
               </>
             )}
+            {/* BetBuilder */}
             {showBetBuilder && 
               <BetBuilder 
                 game={selectedGame}
@@ -246,9 +248,11 @@ function convertDateHeader(fullDate){
               />
             )}
           </div>
+          {/* FAQ */}
           <FAQ />
         </div>
       </div>
+      {/* Footer */}
       <Footer />
     </>
   )

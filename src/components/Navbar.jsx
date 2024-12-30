@@ -1,3 +1,5 @@
+import arrowFeedback from '../assets/icons/arrow-link.svg';
+
 function Navbar() {
   return (
     <>
@@ -15,7 +17,7 @@ function Navbar() {
             <ul className="flex justify-center items-center list-none m-0 p-0">
               <li className="mx-5">
                 <a
-                  href="#"
+                  href="#footer"
                   className="text-black font-medium no-underline text-sm tracking-wide hover:underline"
                 >
                   CONTACT
@@ -29,13 +31,23 @@ function Navbar() {
                   FAQ
                 </a>
               </li>
+              <li className="mx-5">
+                <a
+                  href="https://insigh.to/b/mybetbuilder"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-black font-medium no-underline text-sm tracking-wide hover:underline flex items-center gap-1"
+                >
+                  GIVE FEEDBACK
+                  <img src={arrowFeedback} alt="feedback" className="h-3 inline-block" />
+                </a>
+              </li>
             </ul>
           </div>
         </div>
       </nav>
-      
       {/* Static Banner */}
-      <div className="fixed top-[60px] w-full bg-blue-500 z-50 text-white py-2 text-center overflow-hidden">
+      <div className="fixed top-[60px] w-full bg-black z-50 text-white py-2 text-center overflow-hidden">
         🎉 MyBetBuilder is in Beta! 
       </div>
     </>
