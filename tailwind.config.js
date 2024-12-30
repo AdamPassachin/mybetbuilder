@@ -6,7 +6,12 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'bricolage': ['Bricolage Grotesque', 'system-ui'],
+        'bebas': ['Bebas Neue', 'system-ui'],
+      },
+    },
   },
   plugins: [
     daisyui,

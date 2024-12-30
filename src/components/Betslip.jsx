@@ -118,12 +118,12 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                                             <button 
                                                 className={`h-28 w-full flex items-center justify-center ${
                                                     selectedBookmaker === bookmaker 
-                                                        ? 'bg-gray-300' 
+                                                        ? 'bg-black text-white' 
                                                         : 'bg-white border-gray-200 hover:bg-gray-100 hover:border-gray-300'
                                                 } rounded-lg shadow-sm transition-colors duration-75 border active:bg-gray-300`}
                                                 onClick={() => handleBookmakerSelect(bookmaker)}
                                             >
-                                                <span className="block whitespace-nowrap transform text-center mx-auto px-4 rotate-90 font-medium text-gray-700">
+                                                <span className="block whitespace-nowrap transform text-center mx-auto px-4 rotate-90 font-bold">
                                                     {bookmaker}
                                                 </span>
                                             </button>
@@ -174,7 +174,7 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                                                                     {isHighest && (
                                                                         <img src={crown} alt="Crown" className="absolute top-0 left-0 w-4 h-4 z-10" />
                                                                     )}
-                                                                    <div className={`bg-white rounded w-full flex items-center justify-center shadow-sm p-2 ${isHighest ? 'border-4 border-[#26FFBE]' : ''}`}>
+                                                                    <div className={`bg-white rounded w-full flex items-center justify-center shadow-sm p-2 ${isHighest ? 'border-2 border-black' : ''}`}>
                                                                         {oddValue.odd}
                                                                     </div>
                                                                 </div>
@@ -222,7 +222,7 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                                                                 {isHighest && (
                                                                     <img src={crown} alt="Crown" className="absolute top-0 left-0 w-4 h-4 z-10" />
                                                                 )}
-                                                                <div className={`bg-white rounded w-full flex items-center justify-center shadow-sm p-2 ${isHighest ? 'border-4 border-[#26FFBE]' : ''}`}>
+                                                                <div className={`bg-white rounded w-full flex items-center justify-center shadow-sm p-2 ${isHighest ? 'border-2 border-black' : ''}`}>
                                                                     {totalOdds.toFixed(2)}
                                                                 </div>
                                                             </div>

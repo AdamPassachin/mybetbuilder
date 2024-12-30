@@ -141,7 +141,7 @@ function BetBuilder({ game, gameweek, onConvertTime, selectedOdds, setSelectedOd
                             key={category}
                             className={`px-4 py-2 rounded-full ${
                                 filterSelection === category
-                                    ? 'bg-blue-600 text-white'
+                                    ? 'bg-black text-white'
                                     : 'bg-white text-gray-700 hover:bg-gray-100'
                             }`}
                             onClick={() => setFilterSelection(category)}

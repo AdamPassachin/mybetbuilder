@@ -1,7 +1,7 @@
 function FAQ() {
     const faqItems = [
         {
-          question: "How do I create a betslip?",
+          question: "How do I create a betbuilder?",
           answer: "Simply select your desired bets from any number of fixtures, place your desired stake and compare the possible return across multiple bookmakers." 
         },
         {
@@ -26,7 +26,7 @@ function FAQ() {
         },
         {
           question: "What bookmakers are supported?",
-          answer: "We currently support 16 bookmakers across the world, but will be adding more bookmakers soon."
+          answer: "We currently support up to 16 bookmakers, but will be adding more bookmakers soon."
         },
 
     ];

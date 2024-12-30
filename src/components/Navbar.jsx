@@ -7,9 +7,18 @@ function Navbar() {
         <div className="flex items-center justify-between max-w-full px-8 h-12 text-gray-200">
           {/* Left Section: Logo */}
           <div className="flex items-center h-full cursor-pointer">
-            <a href="/" className="flex items-center cursor-pointer">
-              <img className="h-8" alt="mybetbuilder-logo" src="/logo.png" />
-            </a>
+            <svg viewBox="0 0 200 50" className="h-10">
+              <path
+                id="curve"
+                fill="transparent"
+                d="M10,40 Q100,30 190,40"
+              />
+              <text className="font-bebas">
+                <textPath href="#curve" startOffset="50%" textAnchor="middle" className="text-4xl font-bold">
+                  MyBetBuilder
+                </textPath>
+              </text>
+            </svg>
           </div>
 
           {/* Center Section: Links */}

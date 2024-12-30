@@ -89,7 +89,7 @@ function MarketAccordion({ market, homeTeam, awayTeam, selectedOdds, setSelected
                                                     {isHighest && (
                                                         <img src={crown} alt="Crown" className="absolute top-0 left-0 w-4 h-4 z-10" />
                                                     )}
-                                                    <div className={`bg-white rounded w-full h-full flex items-center justify-center shadow-sm p-2 ${isHighest ? 'border-4 border-[#26FFBE]' : ''}`}>
+                                                    <div className={`bg-white rounded w-full h-full flex items-center justify-center shadow-sm p-2 ${isHighest ? 'border-2 border-black' : ''}`}>
                                                         {oddValue.odd}
                                                     </div>
                                                 </div>
