@@ -23,7 +23,7 @@ function Navbar() {
               </li>
               <li className="mx-5">
                 <a
-                  href="#"
+                  href="#faq"
                   className="text-black font-medium no-underline text-sm tracking-wide hover:underline"
                 >
                   FAQ
@@ -35,7 +35,7 @@ function Navbar() {
       </nav>
       
       {/* Static Banner */}
-      <div className="fixed top-[60px] w-full bg-blue-500 text-white py-2 text-center">
+      <div className="fixed top-[60px] w-full bg-blue-500 z-50 text-white py-2 text-center overflow-hidden">
         🎉 MyBetBuilder is in Beta! 
       </div>
     </>

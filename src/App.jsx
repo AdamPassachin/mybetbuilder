@@ -4,6 +4,8 @@ import GamesList from './components/GamesList'
 import BetBuilder from './components/BetBuilder'
 import chevronLeft from './assets/icons/chevron-left.svg'
 import Betslip from './components/Betslip'
+import FAQ from './components/FAQ'
+import Footer from './components/Footer'
 import check from './assets/icons/check.svg'
 
 
@@ -163,7 +165,7 @@ function convertDateHeader(fullDate){
             <div>
               <h2 className="text-3xl font-bold mb-6 flex items-center gap-2">
                 Welcome to MyBetBuilder!
-                <span className="text-sm bg-yellow-300 px-2 py-1 rounded-lg font-mono transform -rotate-3">beta</span>
+                <span className="text-sm bg-blue-500 text-white px-2 py-1 rounded-lg font-mono transform -rotate-3">beta</span>
               </h2>
               <ul className="space-y-4">
                 {features.map((feature, index) => (
@@ -195,55 +197,59 @@ function convertDateHeader(fullDate){
 
       <Navbar/>
       <div className='w-screen flex justify-center'>
-        <div className='w-[90vw] flex flex-col p-4 my-40 border-none bg-gray-200 rounded-md min-h-[600px] shadow-md'>
-          {showBetBuilder && (
-            <button className='flex justify-center items-center border-none bg-transparent w-9 h-9 hover:bg-gray-300' onClick={() => setShowBetBuilder(false)}>
-              <img className='w-5 h-5' src={chevronLeft} alt='Return' />
-            </button>
-          )}
-          {!showBetBuilder && (
-            <>
-              {currentGameweek ? (
-                <>
-                  <GamesList 
-                    currentGameweek={currentGameweek} 
-                    onGameItemClick={handleShowBetBuilderSection} 
-                    onConvertTime={convertTime}
-                    convertDateHeader={convertDateHeader}
-                  />    
-                </>
-              ) : (
-                <div className="flex justify-center items-center h-full">
-                  <span className="loading loading-spinner loading-lg"></span>
-                </div>
-              )}
-            </>
-          )}
-          {showBetBuilder && 
-            <BetBuilder 
-              game={selectedGame}
-              gameweek={currentGameweek}
-              onConvertTime={convertTime}
-              selectedOdds={selectedOdds}
-              setSelectedOdds={setSelectedOdds}
-              betslipVisible={betslipVisible}
-              setBetslipVisible={setBetslipVisible}
-              bookmakersList={bookmakersList}
-              replaceTeamNames={(value) => replaceTeamNames(value, selectedGame.teams.home.name, selectedGame.teams.away.name)}
-              convertDateHeader={convertDateHeader}
-            />
-          }
-          {betslipVisible && (
-            <Betslip 
-              selectedOdds={selectedOdds}
-              selectedGame={selectedGame}
-              bookmakersList={bookmakersList}
-              replaceTeamNames={replaceTeamNames}
-              handleRemoveBet={handleRemoveBet}
-            />
-          )}
+        <div className='w-[90vw] flex flex-col'>
+          <div className='p-4 my-40 border-none bg-gray-200 rounded-md min-h-[600px] shadow-md'>
+            {showBetBuilder && (
+              <button className='flex justify-center items-center border-none bg-transparent w-9 h-9 hover:bg-gray-300' onClick={() => setShowBetBuilder(false)}>
+                <img className='w-5 h-5' src={chevronLeft} alt='Return' />
+              </button>
+            )}
+            {!showBetBuilder && (
+              <>
+                {currentGameweek ? (
+                  <>
+                    <GamesList 
+                      currentGameweek={currentGameweek} 
+                      onGameItemClick={handleShowBetBuilderSection} 
+                      onConvertTime={convertTime}
+                      convertDateHeader={convertDateHeader}
+                    />    
+                  </>
+                ) : (
+                  <div className="flex justify-center items-center h-full">
+                    <span className="loading loading-spinner loading-lg"></span>
+                  </div>
+                )}
+              </>
+            )}
+            {showBetBuilder && 
+              <BetBuilder 
+                game={selectedGame}
+                gameweek={currentGameweek}
+                onConvertTime={convertTime}
+                selectedOdds={selectedOdds}
+                setSelectedOdds={setSelectedOdds}
+                betslipVisible={betslipVisible}
+                setBetslipVisible={setBetslipVisible}
+                bookmakersList={bookmakersList}
+                replaceTeamNames={(value) => replaceTeamNames(value, selectedGame.teams.home.name, selectedGame.teams.away.name)}
+                convertDateHeader={convertDateHeader}
+              />
+            }
+            {betslipVisible && (
+              <Betslip 
+                selectedOdds={selectedOdds}
+                selectedGame={selectedGame}
+                bookmakersList={bookmakersList}
+                replaceTeamNames={replaceTeamNames}
+                handleRemoveBet={handleRemoveBet}
+              />
+            )}
+          </div>
+          <FAQ />
         </div>
       </div>
+      <Footer />
     </>
   )
 } 
