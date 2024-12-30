@@ -13,7 +13,7 @@ function Footer() {
                             <path
                                 id="curve"
                                 fill="transparent"
-                                d="M10,40 Q100,30 190,40"
+                                d="M10,45 Q100,20 190,45"
                             />
                             <text className="font-bebas" fill="white">
                             <textPath href="#curve" startOffset="50%" textAnchor="middle" className="text-4xl font-bold">
@@ -21,10 +21,10 @@ function Footer() {
                                 </textPath>
                             </text>
                         </svg>
-                        <p className="text-neutral-300 mt-2">
+                        <p className="text-neutral-300 mt-4 ml-4">
                             Compare odds across multiple bookmakers.
                         </p>
-                        <p className="text-neutral-300">
+                        <p className="text-neutral-300 ml-4">
                             Copyright © 2024 MyBetBuilder - All rights reserved.
                         </p>
                     </div>

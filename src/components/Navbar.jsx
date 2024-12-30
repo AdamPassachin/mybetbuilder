@@ -11,7 +11,7 @@ function Navbar() {
               <path
                 id="curve"
                 fill="transparent"
-                d="M10,40 Q100,30 190,40"
+                d="M10,45 Q100,20 190,45"
               />
               <text className="font-bebas">
                 <textPath href="#curve" startOffset="50%" textAnchor="middle" className="text-4xl font-bold">
