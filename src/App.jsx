@@ -16,18 +16,12 @@ function App() {
       "10Bet",
       "William Hill",
       "Bet365",
-      "Marathonbet",
       "Unibet",
       "Betfair",
       "Betsson",
-      "Fonbet",
-      "Pinnacle",
-      "SBO",
       "1xBet",
       "Betano",
-      "Betway",
-      "Tipico",
-      "Dafabet"
+      "Betway"
   ];
 
   // Days of the week
@@ -56,6 +50,9 @@ function App() {
 
   // Add new state for visible items
   const [visibleItems, setVisibleItems] = useState(0);
+
+  // State to store odds format
+  const [oddsFormat, setOddsFormat] = useState('decimal');
 
   // Add list of features
   const features = [
@@ -113,6 +110,15 @@ function convertDateHeader(fullDate){
       return `${hours}:${minutes}`;
   }
 
+  function handleOddsFormatChange(format) {
+    if(format === 'decimal') {
+      setOddsFormat('decimal');
+
+    } else {
+      setOddsFormat('fractional');
+    }
+  }
+
   // Fetch current gameweek from backend
   useEffect(() => {
     const fetchGameweek = async () => {
@@ -166,7 +172,10 @@ function convertDateHeader(fullDate){
         />
       )}
       {/* Navbar */}
-      <Navbar/>
+      <Navbar
+        oddsFormat={oddsFormat}
+        handleOddsFormatChange={handleOddsFormatChange}
+      />
       {/* Main content for GamesList */}
       <div className='w-screen flex justify-center'>
         <div className='w-[80vw] flex flex-col'>
@@ -208,6 +217,7 @@ function convertDateHeader(fullDate){
                 bookmakersList={bookmakersList}
                 replaceTeamNames={(value) => replaceTeamNames(value, selectedGame.teams.home.name, selectedGame.teams.away.name)}
                 convertDateHeader={convertDateHeader}
+                oddsFormat={oddsFormat}
               />
             }
             {betslipVisible && (
@@ -217,6 +227,7 @@ function convertDateHeader(fullDate){
                 bookmakersList={bookmakersList}
                 replaceTeamNames={replaceTeamNames}
                 handleRemoveBet={handleRemoveBet}
+                oddsFormat={oddsFormat}
               />
             )}
           </div>

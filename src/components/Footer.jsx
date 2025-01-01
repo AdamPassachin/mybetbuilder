@@ -36,7 +36,7 @@ function Footer() {
                             <a href="https://x.com/adampassachin" target="_blank" rel="noopener noreferrer">
                                 <img className="h-6" src={x} alt="X Icon" />
                             </a>
-                            <a href="mailto:adam@mybetbuilder.com" target="_blank" rel="noopener noreferrer">
+                            <a href="mailto:mybetbuilder@hotmail.com" target="_blank" rel="noopener noreferrer">
                                 <img className="h-6" src={email} alt="Email Icon" />
                             </a>
                         </div>

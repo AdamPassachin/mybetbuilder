@@ -13,7 +13,7 @@ import {
 } from '../constants/marketCategories';
 
 // Betbuilder that showcases bookmakers and their odds for specific fixture
-function BetBuilder({ game, gameweek, onConvertTime, selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersList, replaceTeamNames, convertDateHeader }) {
+function BetBuilder({ game, gameweek, onConvertTime, selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersList, replaceTeamNames, convertDateHeader, oddsFormat }) {
 
     // Constant to store team names
     const homeTeam = game.teams.home.name;
@@ -166,6 +166,7 @@ function BetBuilder({ game, gameweek, onConvertTime, selectedOdds, setSelectedOd
                                     setBetslipVisible={setBetslipVisible}
                                     homeTeam = {homeTeam}
                                     awayTeam = {awayTeam}
+                                    oddsFormat={oddsFormat}
                                 />
                             ))
                     ) : (

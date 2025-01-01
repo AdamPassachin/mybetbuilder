@@ -26,7 +26,7 @@ function FAQ() {
         },
         {
           question: "What bookmakers are supported?",
-          answer: "We currently support up to 16 bookmakers, but will be adding more bookmakers soon."
+          answer: "We currently support up to 10 bookmakers, but will be adding more bookmakers soon."
         },
 
     ];

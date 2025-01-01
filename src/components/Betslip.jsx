@@ -1,8 +1,9 @@
 import crown from '../assets/icons/crown.svg';
 import closeIcon from '../assets/icons/close-button.svg';
+import { convertOdds } from '../utils/oddsConverter';
 import { useState, useEffect } from 'react';
 
-const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveBet }) => {
+const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveBet, oddsFormat }) => {
 
     // State for betslip accordion
     const [isBetSlipOpen, setIsBetSlipOpen] = useState(true);
@@ -170,12 +171,12 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                                                     return (
                                                         <td key={bookmaker} className="text-center text-sm w-1/4">
                                                             {oddValue ? (
-                                                                <div className="flex justify-center items-center w-full h-full relative transition-transform transform hover:scale-10 hover:shadow-lg">
+                                                                <div className="flex justify-center items-center w-full h-full relative">
                                                                     {isHighest && (
                                                                         <img src={crown} alt="Crown" className="absolute top-0 left-0 w-4 h-4 z-10" />
                                                                     )}
                                                                     <div className={`bg-white rounded w-full flex items-center justify-center shadow-sm p-2 ${isHighest ? 'border-2 border-black' : ''}`}>
-                                                                        {oddValue.odd}
+                                                                        {convertOdds(oddValue.odd, oddsFormat)}
                                                                     </div>
                                                                 </div>
                                                             ) : (
@@ -218,12 +219,12 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                                                 return (
                                                     <td key={bookmaker} className="text-center text-sm w-1/4">
                                                         {totalOdds !== 1 ? (
-                                                            <div className="flex justify-center items-center w-full h-full relative transition-transform transform hover:scale-10 hover:shadow-lg">
+                                                            <div className="flex justify-center items-center w-full h-full relative">
                                                                 {isHighest && (
                                                                     <img src={crown} alt="Crown" className="absolute top-0 left-0 w-4 h-4 z-10" />
                                                                 )}
                                                                 <div className={`bg-white rounded w-full flex items-center justify-center shadow-sm p-2 ${isHighest ? 'border-2 border-black' : ''}`}>
-                                                                    {totalOdds.toFixed(2)}
+                                                                    {convertOdds(totalOdds.toFixed(2), oddsFormat)}
                                                                 </div>
                                                             </div>
                                                         ) : (

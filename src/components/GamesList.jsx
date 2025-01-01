@@ -27,6 +27,13 @@ function GamesList({ onGameItemClick, currentGameweek, onConvertTime, convertDat
       fetchGames();
     }, [currentGameweek]);
 
+    const handleGameClick = (game) => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+      onGameItemClick(game);
+    };
 
     return (
         <>
@@ -62,8 +69,8 @@ function GamesList({ onGameItemClick, currentGameweek, onConvertTime, convertDat
                                     <div className="h-0.5 w-full opacity-50 bg-gray-300 mb-1"></div>
                                 </div>
                               )}
-                              <div className='flex items-center justify-between w-full cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-400 active:bg-gray-700 transform active:scale-95' onClick={() => onGameItemClick(game)}>
-                                <GameItem game={game} onConvertTime={onConvertTime}/>
+                              <div className='flex items-center justify-between w-full cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-400 active:bg-gray-700 transform active:scale-95' onClick={() => handleGameClick(game)}>
+                                <GameItem game={game} onClick={() => handleGameClick(game)} onConvertTime={onConvertTime}/>
                               </div>
                             </div>
                         </React.Fragment>
