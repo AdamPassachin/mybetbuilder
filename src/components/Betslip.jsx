@@ -1,7 +1,9 @@
 import crown from '../assets/icons/crown.svg';
 import closeIcon from '../assets/icons/close-button.svg';
-import { convertOdds } from '../utils/formatter';
+import { convertOdds, formatCurrency } from '../utils/formatter';
 import { useState, useEffect } from 'react';
+import { handleBookmakerSelect } from '../utils/betHandlers';
+import { findHighestOdds } from '../utils/oddsUtils';
 
 const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveBet, oddsFormat }) => {
 
@@ -34,42 +36,6 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
             });
     }, []);
 
-    // Helper function for currency formatting
-    const formatCurrency = (amount) => {
-        try {
-            return new Intl.NumberFormat(undefined, {
-                style: 'currency',
-                currency: userCurrency,
-            }).format(amount);
-        } catch (error) {
-            // Fallback to USD if there's any formatting error
-            return new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-            }).format(amount);
-        }
-    };
-
-    // Function to toggle betslip accordion
-    const handleBetSlipToggle = () => {
-        setIsBetSlipOpen(!isBetSlipOpen);
-    };
-
-    // Function to handle bookmaker selection and calculate total odds
-    const handleBookmakerSelect = (bookmaker) => {
-        setSelectedBookmaker(bookmaker === selectedBookmaker ? null : bookmaker);
-
-        if(bookmaker !== selectedBookmaker){
-            const totalOdds = selectedOdds.reduce((total, betType) => {
-                const oddValue = betType.find((odd) => odd.bookmakerName === bookmaker);
-                return total * (oddValue ? parseFloat(oddValue.odd) : 1);
-            }, 1);
-            setSelectedTotalOdds(totalOdds);
-        } else {
-            setSelectedTotalOdds(null);
-        }
-    };
-
 
     // Existing useEffect for error timing
     useEffect(() => {
@@ -96,7 +62,7 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                     className="peer" 
                     id="accordion-betslip" 
                     checked={isBetSlipOpen}
-                    onChange={handleBetSlipToggle}
+                    onChange={() => setIsBetSlipOpen(!isBetSlipOpen)}
                 />
                 <div className="collapse-title text-lg font-medium flex items-center justify-between" htmlFor="accordion-betslip">
                     <span className="flex items-center">
@@ -122,7 +88,13 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                                                         ? 'bg-black text-white' 
                                                         : 'bg-white border-gray-200 hover:bg-gray-100 hover:border-gray-300'
                                                 } rounded-lg shadow-sm transition-colors duration-75 border active:bg-gray-300`}
-                                                onClick={() => handleBookmakerSelect(bookmaker)}
+                                                onClick={() => handleBookmakerSelect({
+                                                    bookmaker,
+                                                    selectedBookmaker,
+                                                    selectedOdds,
+                                                    setSelectedBookmaker,
+                                                    setSelectedTotalOdds
+                                                })}
                                             >
                                                 <span className="block whitespace-nowrap transform text-center mx-auto px-4 rotate-90 font-bold">
                                                     {bookmaker}
@@ -166,8 +138,17 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                                                 </td>
                                                 {bookmakersList.map((bookmaker) => {
                                                     const oddValue = betType.find((odd) => odd.bookmakerName === bookmaker);
-                                                    const highestOdd = Math.max(...betType.map(odd => parseFloat(odd.odd)));
-                                                    const isHighest = oddValue && parseFloat(oddValue.odd) === highestOdd;
+                                                    // Create market structure expected by findHighestOdds
+                                                    const marketData = bookmakersList.map(bm => ({
+                                                        bookmakerName: bm,
+                                                        values: betType.filter(odd => odd.bookmakerName === bm).map(odd => ({
+                                                            value: odd.bet,
+                                                            odd: odd.odd
+                                                        }))
+                                                    }));
+                                                    const highestOdds = findHighestOdds(marketData, bookmakersList);
+                                                    const isHighest = oddValue && parseFloat(oddValue.odd) === highestOdds[oddValue.bet];
+                                                    
                                                     return (
                                                         <td key={bookmaker} className="text-center text-sm w-1/4">
                                                             {oddValue ? (
@@ -200,21 +181,24 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                                                 </div>
                                             </td>
                                             {bookmakersList.map((bookmaker) => {
-                                                // Calculate total odds for each bookmaker
                                                 const totalOdds = selectedOdds.reduce((total, betType) => {
                                                     const oddValue = betType.find(odd => odd.bookmakerName === bookmaker);
                                                     return total * (oddValue ? parseFloat(oddValue.odd) : 1);
                                                 }, 1);
 
-                                                // Find the highest total odds across all bookmakers
-                                                const allBookmakerTotals = bookmakersList.map(bm => {
-                                                    return selectedOdds.reduce((total, betType) => {
-                                                        const odd = betType.find(o => o.bookmakerName === bm);
-                                                        return total * (odd ? parseFloat(odd.odd) : 1);
-                                                    }, 1);
-                                                });
-                                                const highestTotal = Math.max(...allBookmakerTotals);
-                                                const isHighest = totalOdds === highestTotal;
+                                                // Create market structure for totals
+                                                const marketData = bookmakersList.map(bm => ({
+                                                    bookmakerName: bm,
+                                                    values: [{
+                                                        value: 'total',
+                                                        odd: selectedOdds.reduce((total, betType) => {
+                                                            const odd = betType.find(o => o.bookmakerName === bm);
+                                                            return total * (odd ? parseFloat(odd.odd) : 1);
+                                                        }, 1).toString()
+                                                    }]
+                                                }));
+                                                const highestOdds = findHighestOdds(marketData, bookmakersList);
+                                                const isHighest = totalOdds === highestOdds['total'];
 
                                                 return (
                                                     <td key={bookmaker} className="text-center text-sm w-1/4">
@@ -266,9 +250,9 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                             <div className="bg-[#26FFBE] p-6 rounded-lg font-bold flex justify-between items-center hover:bg-[#1ee5aa] active:bg-[#1ad199] cursor-pointer transition-all flex-1 ml-4">
                                 <div className="flex items-center gap-4">
                                     <span>Place bet</span>
-                                    <span>{formatCurrency(Number(stakeAmount))}</span>
+                                    <span>{formatCurrency(Number(stakeAmount), userCurrency)}</span>
                                 </div>
-                                <span>Potential returns: {formatCurrency(Number(stakeAmount) * selectedTotalOdds)}</span>
+                                <span>Potential returns: {formatCurrency(Number(stakeAmount) * selectedTotalOdds, userCurrency)}</span>
                             </div>
                         )}
                     </div>

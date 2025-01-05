@@ -1,11 +1,13 @@
 import React from 'react';
 import GameItem from './GameItem';
 import { useState, useEffect } from 'react';
+import { handleGameClick } from '../utils/betHandlers';
 
 
 // GamesList component for the games list. We make api call here and pass the data to the Game component. Create row for each game.
-function GamesList({ onGameItemClick, currentGameweek, onConvertTime, convertDateHeader, daysOfWeek, months }) {
+function GamesList({ onGameItemClick, currentGameweek, onConvertTime, convertDateHeader}) {
 
+    // State to store current games
     const [currentGames, setCurrentGames] = useState([]);
 
     // Fetch current fixtures for current gameweek
@@ -26,14 +28,6 @@ function GamesList({ onGameItemClick, currentGameweek, onConvertTime, convertDat
       };
       fetchGames();
     }, [currentGameweek]);
-
-    const handleGameClick = (game) => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-      onGameItemClick(game);
-    };
 
     return (
         <>
@@ -69,8 +63,12 @@ function GamesList({ onGameItemClick, currentGameweek, onConvertTime, convertDat
                                     <div className="h-0.5 w-full opacity-50 bg-gray-300 mb-1"></div>
                                 </div>
                               )}
-                              <div className='flex items-center justify-between w-full cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-400 active:bg-gray-700 transform active:scale-95' onClick={() => handleGameClick(game)}>
-                                <GameItem game={game} onClick={() => handleGameClick(game)} onConvertTime={onConvertTime}/>
+                              <div className='flex items-center justify-between w-full cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-400 active:bg-gray-700 transform active:scale-95' 
+                                   onClick={() => handleGameClick(game, onGameItemClick)}>
+                                    <GameItem game={game} 
+                                      onClick={() => handleGameClick(game, onGameItemClick)} 
+                                      onConvertTime={onConvertTime}
+                                    />
                               </div>
                             </div>
                         </React.Fragment>

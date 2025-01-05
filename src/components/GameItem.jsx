@@ -2,6 +2,7 @@ import chevronRight from '../assets/icons/chevron-right.svg';
 
 // GameItem component for displaying a single game item
 function GameItem({ game, onConvertTime }) {
+    
     // Use the game status directly from the game prop
     const gameStatus = game.fixture.status.short;
 

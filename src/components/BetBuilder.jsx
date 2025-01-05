@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import MarketAccordion from './MarketAccordion';
+import { groupBetsByType } from '../utils/betHandlers';
 import { 
     MARKET_CATEGORIES, 
     POPULAR_MARKETS, 
@@ -11,6 +12,7 @@ import {
     GOALS_MARKETS,
     OTHER_MARKETS
 } from '../constants/marketCategories';
+
 
 // Betbuilder that showcases bookmakers and their odds for specific fixture
 function BetBuilder({ game, gameweek, onConvertTime, selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersList, replaceTeamNames, convertDateHeader, oddsFormat }) {
@@ -74,25 +76,6 @@ function BetBuilder({ game, gameweek, onConvertTime, selectedOdds, setSelectedOd
       }, [fixture_id]);
 
 
-    // Function to group bets by bet type
-    const groupBetsByType = (markets) => {
-        const groupedBets = {};
-
-        markets.forEach(market => {
-            market.bookmakers.forEach(bookmaker => {
-                bookmaker.bets.forEach(bet => {
-                    if (!groupedBets[bet.name]) {
-                        groupedBets[bet.name] = [];
-                    }
-                    groupedBets[bet.name].push({ bookmakerId: bookmaker.id, bookmakerName: bookmaker.name, ...bet });
-                });
-            });
-        });
-        return groupedBets;
-    };
-
-    const groupedBets = groupBetsByType(markets);
-
     return (
         <>
             <div className="flex flex-col bg-gray-300 p-5 mt-4 rounded-lg">
@@ -152,13 +135,13 @@ function BetBuilder({ game, gameweek, onConvertTime, selectedOdds, setSelectedOd
                 </div>
 
                 <div className='bg-white rounded p-4'>
-                    {Object.keys(groupedBets).length > 0 ? (
-                        Object.keys(groupedBets)
+                    {Object.keys(groupBetsByType(markets)).length > 0 ? (
+                        Object.keys(groupBetsByType(markets))
                             .filter(filterMarkets)
                             .map(betType => (
                                 <MarketAccordion 
                                     key={betType}
-                                    market={groupedBets[betType]}
+                                    market={groupBetsByType(markets)[betType]}
                                     selectedOdds = {selectedOdds}
                                     bookmakersList={bookmakersList}
                                     replaceTeamNames = {replaceTeamNames}

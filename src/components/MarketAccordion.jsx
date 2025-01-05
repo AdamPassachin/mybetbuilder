@@ -1,25 +1,9 @@
 import crown from '../assets/icons/crown.svg';
 import { handleOddClick } from '../utils/betHandlers';
 import { convertOdds } from '../utils/formatter';
+import { findHighestOdds } from '../utils/oddsUtils';
 
 function MarketAccordion({ market, homeTeam, awayTeam, selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersList, replaceTeamNames, oddsFormat }) {
-
-    // Find the highest odd for each value, but only from active bookmakers
-    const highestOdds = market.reduce((acc, bookmaker) => {
-        // Only process if the bookmaker is in our active list
-        if (bookmakersList.includes(bookmaker.bookmakerName)) {
-            bookmaker.values.forEach((entry) => {
-                const value = entry.value;
-                const odd = parseFloat(entry.odd);
-                
-                if (!acc[value] || odd > acc[value]) {
-                    acc[value] = odd;
-                }
-            });
-        }
-        return acc;
-    }, {});
-
     return (
         <div className="collapse collapse-arrow bg-white text-black">
             <input type="radio" name="accordion" id="accordion-market" />
@@ -51,7 +35,7 @@ function MarketAccordion({ market, homeTeam, awayTeam, selectedOdds, setSelected
                                 {bookmakersList.map((bookmaker) => {
                                     const oddValue = market.find((b) => b.bookmakerName === bookmaker)?.values.find((v) => v.value === value.value);
                                     const currentOdd = oddValue ? parseFloat(oddValue.odd) : null;
-                                    const isHighest = currentOdd && currentOdd >= highestOdds[value.value];
+                                    const isHighest = currentOdd && currentOdd >= findHighestOdds(market, bookmakersList)[value.value];
                                     return (
                                         <td key={bookmaker} className="text-center text-sm w-1/4">
                                             {oddValue ? (

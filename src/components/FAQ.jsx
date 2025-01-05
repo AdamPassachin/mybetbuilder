@@ -1,3 +1,4 @@
+// FAQ component for the FAQ section
 function FAQ() {
     const faqItems = [
         {

@@ -1,7 +1,9 @@
 import x from '../assets/icons/x.svg';
 import email from '../assets/icons/email.svg';
 
+// Footer component for the footer
 function Footer() {
+
     return (
         <footer id='footer' className="footer bg-black text-neutral-300 p-10 border-t">
             <div className="max-w-4xl mx-auto w-full">

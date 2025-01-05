@@ -7,6 +7,8 @@ import PopupModal from './components/PopupModal'
 import FAQ from './components/FAQ'
 import Footer from './components/Footer'
 import chevronLeft from './assets/icons/chevron-left.svg'
+import { handleRemoveBet, replaceTeamNames } from './utils/betHandlers'
+import { convertTime, convertDateHeader } from './utils/formatter'
 
 function App() {
 
@@ -23,12 +25,6 @@ function App() {
       "Betano",
       "Betway"
   ];
-
-  // Days of the week
-  const daysOfWeek = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-  // Months of the year
-  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
   // State to control the visibility of the betbuilder 
   const [showBetBuilder, setShowBetBuilder] = useState(false);
@@ -72,52 +68,6 @@ function App() {
     }
   }, [showPopup, visibleItems]);
 
-  // Replace team names (helper function)
-  const replaceTeamNames = (value, homeTeam, awayTeam) => {
-    if (typeof value === 'string') {
-        return value  
-            .replace(/Home/g, homeTeam)
-            .replace(/Away/g, awayTeam);
-    }
-    return value;
-};
-
-//Function to convert and format the date 
-function convertDateHeader(fullDate){
-  const date = new Date(fullDate);
-  const day = date.getDay();
-  const dateDay = date.getDate();
-  const month = date.getMonth();
-
-  // Determine the ordinal suffix
-  const suffix = (dateDay) => {
-      if (dateDay > 3 && dateDay < 21) return 'th'; // Catch 11th-13th
-      switch (dateDay % 10) {
-          case 1: return 'st';
-          case 2: return 'nd';
-          case 3: return 'rd';
-          default: return 'th';
-      }
-  };
-  return `${daysOfWeek[day]}, ${dateDay}${suffix(dateDay)} ${months[month]}`;
-}
-
-  // Convert the date to a more readable format in hours and minutes
-  function convertTime(fullDate) {
-      const date = new Date(fullDate);
-      const hours = date.getHours().toString().padStart(2, '0');
-      const minutes = date.getMinutes().toString().padStart(2, '0');
-      return `${hours}:${minutes}`;
-  }
-
-  function handleOddsFormatChange(format) {
-    if(format === 'decimal') {
-      setOddsFormat('decimal');
-
-    } else {
-      setOddsFormat('fractional');
-    }
-  }
 
   // Fetch current gameweek from backend
   useEffect(() => {
@@ -139,27 +89,6 @@ function convertDateHeader(fullDate){
     fetchGameweek();
   }, []);
 
-  // Handle the click event on a game item and set the selected game
-  function handleShowBetBuilderSection(game) {
-    setShowBetBuilder(true);
-    setSelectedGame(game);
-
-  }
-
-  // Function to remove bet from betslip
-  const handleRemoveBet = (index) => {
-    setSelectedOdds(prevOdds => {
-        const newOdds = [...prevOdds];
-        newOdds.splice(index, 1);
-        
-        // Hide betslip if all bets are removed
-        if (newOdds.length === 0) {
-            setBetslipVisible(false);
-        }
-        
-        return newOdds;
-    });
-};
 
   return (
     <>
@@ -174,7 +103,7 @@ function convertDateHeader(fullDate){
       {/* Navbar */}
       <Navbar
         oddsFormat={oddsFormat}
-        handleOddsFormatChange={handleOddsFormatChange}
+        handleOddsFormatChange={(format) => setOddsFormat(format)}
       />
       {/* Main content for GamesList */}
       <div className='w-screen flex justify-center'>
@@ -192,7 +121,10 @@ function convertDateHeader(fullDate){
                     {/* GamesList */}
                     <GamesList 
                       currentGameweek={currentGameweek} 
-                      onGameItemClick={handleShowBetBuilderSection} 
+                      onGameItemClick={(game) => {
+                        setShowBetBuilder(true);
+                        setSelectedGame(game);
+                      }} 
                       onConvertTime={convertTime}
                       convertDateHeader={convertDateHeader}
                     />    
@@ -215,7 +147,6 @@ function convertDateHeader(fullDate){
                 betslipVisible={betslipVisible}
                 setBetslipVisible={setBetslipVisible}
                 bookmakersList={bookmakersList}
-                replaceTeamNames={(value) => replaceTeamNames(value, selectedGame.teams.home.name, selectedGame.teams.away.name)}
                 convertDateHeader={convertDateHeader}
                 oddsFormat={oddsFormat}
               />
@@ -226,7 +157,11 @@ function convertDateHeader(fullDate){
                 selectedGame={selectedGame}
                 bookmakersList={bookmakersList}
                 replaceTeamNames={replaceTeamNames}
-                handleRemoveBet={handleRemoveBet}
+                handleRemoveBet={(index) => handleRemoveBet({ 
+                  index, 
+                  setSelectedOdds, 
+                  setBetslipVisible 
+                })}
                 oddsFormat={oddsFormat}
               />
             )}
