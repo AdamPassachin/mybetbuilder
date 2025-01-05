@@ -1,54 +1,22 @@
 import crown from '../assets/icons/crown.svg';
-import { convertOdds } from '../utils/oddsConverter';
+import { handleOddClick } from '../utils/betHandlers';
+import { convertOdds } from '../utils/formatter';
 
 function MarketAccordion({ market, homeTeam, awayTeam, selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersList, replaceTeamNames, oddsFormat }) {
 
-    // Function to add bet to bet (selectedOdd)
-    const handleOddClick = (value) => {
-        // Check if any existing bet is from the same market
-        const sameMarketExists = selectedOdds.some(betGroup => 
-            betGroup[0].market === market[0]?.name
-        );
-        
-        const oddsForValue = market.flatMap(bookmaker => 
-            bookmaker.values.filter(v => v.value === value).map(v => ({ 
-                bookmakerName: bookmaker.bookmakerName, 
-                odd: v.odd, 
-                bet: value,
-                market: market[0]?.name,
-                fixture: `${homeTeam} vs ${awayTeam}`,
-                homeTeam,
-                awayTeam,
-                error: sameMarketExists
-            })));
-
-        if (sameMarketExists) {
-            // If there's already a bet from this market, update all existing bets from this market to show error
-            const updatedOdds = selectedOdds.map(betGroup => {
-                if (betGroup[0].market === market[0]?.name) {
-                    return betGroup.map(bet => ({ ...bet, error: true }));
-                }
-                return betGroup;
-            });
-            setSelectedOdds(updatedOdds);
-        } else {
-            setSelectedOdds(prevOdds => {
-                const newOdds = [...prevOdds, oddsForValue];
-                return newOdds;
-            });
-            setBetslipVisible(true);
-        }
-    };
-
-
-    // Find the highest odd for each value
+    // Find the highest odd for each value, but only from active bookmakers
     const highestOdds = market.reduce((acc, bookmaker) => {
-        bookmaker.values.forEach((entry) => {
-            const odd = parseFloat(entry.odd);
-            if (!acc[entry.value] || odd > acc[entry.value]) {
-                acc[entry.value] = odd; // Update if odd is higher
-            }
-        });
+        // Only process if the bookmaker is in our active list
+        if (bookmakersList.includes(bookmaker.bookmakerName)) {
+            bookmaker.values.forEach((entry) => {
+                const value = entry.value;
+                const odd = parseFloat(entry.odd);
+                
+                if (!acc[value] || odd > acc[value]) {
+                    acc[value] = odd;
+                }
+            });
+        }
         return acc;
     }, {});
 
@@ -82,11 +50,21 @@ function MarketAccordion({ market, homeTeam, awayTeam, selectedOdds, setSelected
                                 </td>
                                 {bookmakersList.map((bookmaker) => {
                                     const oddValue = market.find((b) => b.bookmakerName === bookmaker)?.values.find((v) => v.value === value.value);
-                                    const isHighest = oddValue && parseFloat(oddValue.odd) === highestOdds[value.value];
+                                    const currentOdd = oddValue ? parseFloat(oddValue.odd) : null;
+                                    const isHighest = currentOdd && currentOdd >= highestOdds[value.value];
                                     return (
                                         <td key={bookmaker} className="text-center text-sm w-1/4">
                                             {oddValue ? (
-                                                <div className="flex justify-center items-center w-full h-full relative transition-transform transform hover:scale-10 hover:shadow-lg" onClick={() => handleOddClick(value.value)}>
+                                                <div className="flex justify-center items-center w-full h-full relative transition-transform transform hover:scale-10 hover:shadow-lg"
+                                                    onClick={() => handleOddClick({
+                                                        value: value.value,
+                                                        selectedOdds,
+                                                        market,
+                                                        homeTeam,
+                                                        awayTeam,
+                                                        setSelectedOdds,
+                                                        setBetslipVisible
+                                                    })}>
                                                     {isHighest && (
                                                         <img src={crown} alt="Crown" className="absolute top-0 left-0 w-4 h-4 z-10" />
                                                     )}

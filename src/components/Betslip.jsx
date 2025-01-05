@@ -1,6 +1,6 @@
 import crown from '../assets/icons/crown.svg';
 import closeIcon from '../assets/icons/close-button.svg';
-import { convertOdds } from '../utils/oddsConverter';
+import { convertOdds } from '../utils/formatter';
 import { useState, useEffect } from 'react';
 
 const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveBet, oddsFormat }) => {

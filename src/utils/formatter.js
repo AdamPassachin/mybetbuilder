@@ -1,5 +1,4 @@
 // Function to convert odds to decimal or fractional
-
 export const convertOdds = (odds, format) => {
   // Handle fractional to decimal conversion
   if (format === 'decimal' && typeof odds === 'string' && odds.includes('/')) {

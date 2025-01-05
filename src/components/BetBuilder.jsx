@@ -139,7 +139,7 @@ function BetBuilder({ game, gameweek, onConvertTime, selectedOdds, setSelectedOd
                     {Object.values(MARKET_CATEGORIES).map((category) => (
                         <button
                             key={category}
-                            className={`px-4 py-2 rounded-full ${
+                            className={`px-2 py-2 rounded-full ${
                                 filterSelection === category
                                     ? 'bg-black text-white'
                                     : 'bg-white text-gray-700 hover:bg-gray-100'

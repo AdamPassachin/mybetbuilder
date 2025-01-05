@@ -51,7 +51,7 @@ function Navbar({ oddsFormat, handleOddsFormatChange }) {
                   rel="noopener noreferrer"
                   className="text-black font-medium no-underline text-sm tracking-wide hover:underline flex items-center gap-1"
                 >
-                  GIVE FEEDBACK
+                  SUGGEST A FEATURE
                   <img src={arrowFeedback} alt="feedback" className="h-3 inline-block" />
                 </a>
               </li>
