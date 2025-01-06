@@ -7,8 +7,8 @@ import PopupModal from './components/PopupModal'
 import FAQ from './components/FAQ'
 import Footer from './components/Footer'
 import chevronLeft from './assets/icons/chevron-left.svg'
-import { handleRemoveBet, replaceTeamNames } from './utils/betHandlers'
-import { convertTime, convertDateHeader } from './utils/formatter'
+import { setCachedData, getCachedData } from './utils/cache'
+
 
 function App() {
 
@@ -50,6 +50,7 @@ function App() {
   // State to store odds format
   const [oddsFormat, setOddsFormat] = useState('decimal');
 
+
   // Add list of features
   const features = [
     "Choose any Premier League fixture",
@@ -72,6 +73,12 @@ function App() {
   // Fetch current gameweek from backend
   useEffect(() => {
     const fetchGameweek = async () => {
+      const cachedGameweek = getCachedData('gameweek');
+      if (cachedGameweek) {
+        setCurrentGameweek(parseInt(cachedGameweek))
+        return;
+      }
+
       try {
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/gameweek`);
         if (!response.ok) {
@@ -80,6 +87,7 @@ function App() {
         const data = await response.json();
         if (data.response && data.response.length > 0) {
           setCurrentGameweek(parseInt(data.response[0].split('-')[1].trim()));
+          setCachedData('gameweek', data.response[0].split('-')[1].trim());
         }
       } catch (error) {
         console.error('Error fetching current gameweek:', error);
@@ -103,7 +111,7 @@ function App() {
       {/* Navbar */}
       <Navbar
         oddsFormat={oddsFormat}
-        handleOddsFormatChange={(format) => setOddsFormat(format)}
+        setOddsFormat={setOddsFormat}
       />
       {/* Main content for GamesList */}
       <div className='w-screen flex justify-center'>
@@ -125,8 +133,6 @@ function App() {
                         setShowBetBuilder(true);
                         setSelectedGame(game);
                       }} 
-                      onConvertTime={convertTime}
-                      convertDateHeader={convertDateHeader}
                     />    
                   </>
                 ) : (
@@ -141,27 +147,21 @@ function App() {
               <BetBuilder 
                 game={selectedGame}
                 gameweek={currentGameweek}
-                onConvertTime={convertTime}
                 selectedOdds={selectedOdds}
                 setSelectedOdds={setSelectedOdds}
                 betslipVisible={betslipVisible}
                 setBetslipVisible={setBetslipVisible}
                 bookmakersList={bookmakersList}
-                convertDateHeader={convertDateHeader}
                 oddsFormat={oddsFormat}
               />
             }
             {betslipVisible && (
               <Betslip 
                 selectedOdds={selectedOdds}
+                setSelectedOdds={setSelectedOdds}
+                setBetslipVisible={setBetslipVisible}
                 selectedGame={selectedGame}
                 bookmakersList={bookmakersList}
-                replaceTeamNames={replaceTeamNames}
-                handleRemoveBet={(index) => handleRemoveBet({ 
-                  index, 
-                  setSelectedOdds, 
-                  setBetslipVisible 
-                })}
                 oddsFormat={oddsFormat}
               />
             )}

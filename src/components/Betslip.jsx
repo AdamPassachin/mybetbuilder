@@ -1,11 +1,12 @@
 import crown from '../assets/icons/crown.svg';
 import closeIcon from '../assets/icons/close-button.svg';
-import { convertOdds, formatCurrency } from '../utils/formatter';
+import { formatOdds, formatCurrency, replaceTeamNames } from '../utils/formatter';
 import { useState, useEffect } from 'react';
-import { handleBookmakerSelect } from '../utils/betHandlers';
+import { handleBookmakerSelect, handleRemoveBet } from '../utils/betHandlers';
 import { findHighestOdds } from '../utils/oddsUtils';
 
-const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveBet, oddsFormat }) => {
+
+const Betslip = ({ selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersList, oddsFormat }) => {
 
     // State for betslip accordion
     const [isBetSlipOpen, setIsBetSlipOpen] = useState(true);
@@ -111,7 +112,7 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                                                 <td className="p-1 w-8">
                                                     <img 
                                                         src={closeIcon} 
-                                                        onClick={() => handleRemoveBet(index)} 
+                                                        onClick={() => handleRemoveBet({index, setSelectedOdds, setBetslipVisible})} 
                                                         alt="Close" 
                                                         className="w-5 h-5 cursor-pointer hover:opacity-70 hover:[filter:invert(15%)_sepia(95%)_saturate(6932%)_hue-rotate(359deg)_brightness(103%)_contrast(113%)] transition-all" 
                                                     />
@@ -157,7 +158,7 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                                                                         <img src={crown} alt="Crown" className="absolute top-0 left-0 w-4 h-4 z-10" />
                                                                     )}
                                                                     <div className={`bg-white rounded w-full flex items-center justify-center shadow-sm p-2 ${isHighest ? 'border-2 border-black' : ''}`}>
-                                                                        {convertOdds(oddValue.odd, oddsFormat)}
+                                                                        {formatOdds(oddValue.odd, oddsFormat)}
                                                                     </div>
                                                                 </div>
                                                             ) : (
@@ -208,7 +209,7 @@ const Betslip = ({ selectedOdds, bookmakersList, replaceTeamNames, handleRemoveB
                                                                     <img src={crown} alt="Crown" className="absolute top-0 left-0 w-4 h-4 z-10" />
                                                                 )}
                                                                 <div className={`bg-white rounded w-full flex items-center justify-center shadow-sm p-2 ${isHighest ? 'border-2 border-black' : ''}`}>
-                                                                    {convertOdds(totalOdds.toFixed(2), oddsFormat)}
+                                                                    {formatOdds(totalOdds.toFixed(2), oddsFormat)}
                                                                 </div>
                                                             </div>
                                                         ) : (

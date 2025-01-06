@@ -2,10 +2,11 @@ import React from 'react';
 import GameItem from './GameItem';
 import { useState, useEffect } from 'react';
 import { handleGameClick } from '../utils/betHandlers';
+import { convertDateHeader } from '../utils/formatter';
 
 
 // GamesList component for the games list. We make api call here and pass the data to the Game component. Create row for each game.
-function GamesList({ onGameItemClick, currentGameweek, onConvertTime, convertDateHeader}) {
+function GamesList({ onGameItemClick, currentGameweek }) {
 
     // State to store current games
     const [currentGames, setCurrentGames] = useState([]);
@@ -20,7 +21,11 @@ function GamesList({ onGameItemClick, currentGameweek, onConvertTime, convertDat
           }
           const data = await response.json();
           if (data.response && data.response.length > 0) {
-            setCurrentGames(data.response);
+            // Sort games by fixture date to maintain chronological order
+            const sortedGames = data.response.sort((a, b) => 
+              new Date(a.fixture.date) - new Date(b.fixture.date)
+            );
+            setCurrentGames(sortedGames);
           }
         } catch (error) {
           console.error('Error fetching current games:', error);
@@ -67,7 +72,6 @@ function GamesList({ onGameItemClick, currentGameweek, onConvertTime, convertDat
                                    onClick={() => handleGameClick(game, onGameItemClick)}>
                                     <GameItem game={game} 
                                       onClick={() => handleGameClick(game, onGameItemClick)} 
-                                      onConvertTime={onConvertTime}
                                     />
                               </div>
                             </div>

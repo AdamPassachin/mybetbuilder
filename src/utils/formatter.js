@@ -1,5 +1,5 @@
 // Function to convert odds to decimal or fractional
-export const convertOdds = (odds, format) => {
+export const formatOdds = (odds, format) => {
   // Handle fractional to decimal conversion
   if (format === 'decimal' && typeof odds === 'string' && odds.includes('/')) {
     const [numerator, denominator] = odds.split('/').map(Number);
@@ -71,3 +71,13 @@ export const convertDateHeader = (fullDate) => {
     };
     return `${daysOfWeek[day]}, ${dateDay}${suffix(dateDay)} ${months[month]}`;
 }; 
+
+// Replaces Home/Away placeholders with actual team names
+export const replaceTeamNames = (value, homeTeam, awayTeam) => {
+  if (typeof value === 'string') {
+      return value  
+          .replace(/Home/g, homeTeam)
+          .replace(/Away/g, awayTeam);
+  }
+  return value;
+};

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import MarketAccordion from './MarketAccordion';
 import { groupBetsByType } from '../utils/betHandlers';
+import { convertTime, convertDateHeader, replaceTeamNames } from '../utils/formatter';
 import { 
     MARKET_CATEGORIES, 
     POPULAR_MARKETS, 
@@ -15,7 +16,7 @@ import {
 
 
 // Betbuilder that showcases bookmakers and their odds for specific fixture
-function BetBuilder({ game, gameweek, onConvertTime, selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersList, replaceTeamNames, convertDateHeader, oddsFormat }) {
+function BetBuilder({ game, gameweek, selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersList, oddsFormat }) {
 
     // Constant to store team names
     const homeTeam = game.teams.home.name;
@@ -106,7 +107,7 @@ function BetBuilder({ game, gameweek, onConvertTime, selectedOdds, setSelectedOd
                             </div> 
                         )}    
                         <span className='text-xl'>
-                            {gameStatus === "FT" ? "FT" :  gameStatus === "1H" || gameStatus === "2H" || gameStatus === "HT"  ? "Live": onConvertTime(game.fixture.date)}
+                            {gameStatus === "FT" ? "FT" :  gameStatus === "1H" || gameStatus === "2H" || gameStatus === "HT"  ? "Live": convertTime(game.fixture.date)}
                         </span>
                         <span className='text-sm text-gray-600'>
                             {convertDateHeader(game.fixture.date)}
@@ -144,7 +145,6 @@ function BetBuilder({ game, gameweek, onConvertTime, selectedOdds, setSelectedOd
                                     market={groupBetsByType(markets)[betType]}
                                     selectedOdds = {selectedOdds}
                                     bookmakersList={bookmakersList}
-                                    replaceTeamNames = {replaceTeamNames}
                                     setSelectedOdds={setSelectedOdds}
                                     setBetslipVisible={setBetslipVisible}
                                     homeTeam = {homeTeam}

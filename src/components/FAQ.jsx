@@ -1,5 +1,6 @@
 // FAQ component for the FAQ section
 function FAQ() {
+    // FAQ items
     const faqItems = [
         {
           question: "How do I create a betbuilder?",

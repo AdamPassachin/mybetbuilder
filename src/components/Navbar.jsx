@@ -1,7 +1,6 @@
 import arrowFeedback from '../assets/icons/arrow-link.svg';
 
-
-function Navbar({ oddsFormat, handleOddsFormatChange }) {
+function Navbar({ oddsFormat, setOddsFormat }) {
 
 
   return (
@@ -74,7 +73,7 @@ function Navbar({ oddsFormat, handleOddsFormatChange }) {
                 <li>
                   <a 
                     className={oddsFormat === 'decimal' ? 'active' : ''} 
-                    onClick={() => handleOddsFormatChange('decimal')}
+                    onClick={() => setOddsFormat('decimal')}
                   >
                     Decimal Odds
                   </a>
@@ -82,7 +81,7 @@ function Navbar({ oddsFormat, handleOddsFormatChange }) {
                 <li>
                   <a 
                     className={oddsFormat === 'fractional' ? 'active' : ''} 
-                    onClick={() => handleOddsFormatChange('fractional')}
+                    onClick={() => setOddsFormat('fractional')}
                   >
                     Fractional Odds
                   </a>
