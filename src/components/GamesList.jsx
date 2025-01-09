@@ -3,6 +3,7 @@ import GameItem from './GameItem';
 import { useState, useEffect } from 'react';
 import { handleGameClick } from '../utils/betHandlers';
 import { convertDateHeader } from '../utils/formatter';
+import { getCachedData, setCachedData } from '../utils/cache';
 
 
 // GamesList component for the games list. We make api call here and pass the data to the Game component. Create row for each game.
@@ -16,17 +17,59 @@ function GamesList({ onGameItemClick, currentGameweek }) {
     useEffect(() => {
       const fetchGames = async () => {
         try {
+          // Check cache first
+          const cachedGames = getCachedData(`games-${currentGameweek}`);
+          const cachedStatus = getCachedData(`status-${currentGameweek}`);
+
+          // If games cache is valid, use it initially to show something to the user
+          if (cachedGames) {
+            const initialGames = cachedStatus 
+              ? cachedGames.map(game => ({
+                  ...game,
+                  fixture: { ...game.fixture, status: cachedStatus[game.fixture.id] }
+                }))
+              : cachedGames;
+            setCurrentGames(initialGames);
+
+            // If status is also valid, we can skip the API call
+            if (cachedStatus) {
+              return;
+            }
+            // Otherwise, continue to API call to at least update status
+          }
+
+          // Make API call for fresh data
           const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/games?gameweek=${currentGameweek}`);
           if (!response.ok) {
             throw new Error('Failed to fetch games');
           }
           const data = await response.json();
+          
           if (data.response && data.response.length > 0) {
-            // Sort games by fixture date to maintain chronological order
             const sortedGames = data.response.sort((a, b) => 
               new Date(a.fixture.date) - new Date(b.fixture.date)
             );
-            setCurrentGames(sortedGames);
+
+            // Always cache the status as it's the most frequently changing part
+            const statusData = Object.fromEntries(
+              sortedGames.map(game => [game.fixture.id, game.fixture.status])
+            );
+            setCachedData(`status-${currentGameweek}`, statusData);
+
+            // Only cache games if we don't have a valid games cache
+            if (!cachedGames) {
+              setCachedData(`games-${currentGameweek}`, sortedGames);
+            }
+            
+            // If we had cached games, only update the status
+            const finalGames = cachedGames 
+              ? cachedGames.map(game => ({
+                  ...game,
+                  fixture: { ...game.fixture, status: statusData[game.fixture.id] }
+                }))
+              : sortedGames;
+            
+            setCurrentGames(finalGames);
           }
         } catch (error) {
           console.error('Error fetching current games:', error);

@@ -42,11 +42,8 @@ export default async function gamesRoutes(fastify, opts) {
                 });
 
             if (cachedGameweek) {
-                console.log('🎯 Cache HIT - Returning cached gameweek data');
                 return JSON.parse(cachedGameweek);
             }
-            
-            console.log('❌ Cache MISS - Fetching from API...');
             
             if (!process.env.RAPIDAPI_KEY) {
                 throw new Error('RAPIDAPI_KEY is not set in the environment');
