@@ -99,13 +99,6 @@ function BetBuilder({ game, gameweek, selectedOdds, setSelectedOdds, setBetslipV
                         <p className='text-lg my-1'>{game.teams.home.name}</p>
                     </div>
                     <div className='flex flex-col items-center mx-20'>
-                        {(gameStatus === "FT") && (
-                            <div className='text-3xl flex'>
-                                {game.score.fulltime.home}
-                                -
-                                {game.score.fulltime.away}
-                            </div> 
-                        )}    
                         <span className='text-xl'>
                             {gameStatus === "FT" ? "FT" :  gameStatus === "1H" || gameStatus === "2H" || gameStatus === "HT"  ? "Live": convertTime(game.fixture.date)}
                         </span>

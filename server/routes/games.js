@@ -1,8 +1,53 @@
+import { createClient } from 'redis';
+
+
+// Create a Redis client
+const redis = createClient({
+    url: process.env.REDIS_URL || 'redis://localhost:6379'
+});
+
+// Add Redis error handling
+redis.on('error', err => console.error('Redis Client Error:', err));
+redis.on('connect', () => console.log('Redis Client Connected'));
+redis.on('reconnecting', () => console.log('Redis Client Reconnecting'));
+
+// Connect with error handling
+(async () => {
+    try {
+        await redis.connect();
+    } catch (err) {
+        console.error('Redis Connection Error:', err);
+    }
+})();
+
+// Constants
+const GAMEWEEK_CACHE_KEY = 'gameweek';
+const CACHE_DURATION = 24 * 60 * 60 * 1000; // 1 day in ms
+
 // Routes for the games
 export default async function gamesRoutes(fastify, opts) {
-    // Route to get the current gameweek
+    // GET Route to get the current gameweek
     fastify.get('/gameweek', async (request, reply) => {
         try {
+            // Ensure Redis is connected
+            if (!redis.isReady) {
+                throw new Error('Redis connection is not ready');
+            }
+
+            // Check if the gameweek is cached
+            const cachedGameweek = await redis.get(GAMEWEEK_CACHE_KEY)
+                .catch(err => {
+                    console.error('Redis get error:', err);
+                    return null;
+                });
+
+            if (cachedGameweek) {
+                console.log('🎯 Cache HIT - Returning cached gameweek data');
+                return JSON.parse(cachedGameweek);
+            }
+            
+            console.log('❌ Cache MISS - Fetching from API...');
+            
             if (!process.env.RAPIDAPI_KEY) {
                 throw new Error('RAPIDAPI_KEY is not set in the environment');
             }
@@ -17,12 +62,18 @@ export default async function gamesRoutes(fastify, opts) {
             if (!response.ok) {
                 throw new Error(`API request failed with status ${response.status}`);
             }
-
             const data = await response.json();
+
+            // Cache the gameweek data
+            await redis.set(GAMEWEEK_CACHE_KEY, JSON.stringify(data), { EX: CACHE_DURATION })
+                .catch(err => console.error('Redis set error:', err));
+
             return data;
         } catch (error) {
             console.error('Error fetching gameweek data:', error);
-            reply.status(500).send({ error: 'Internal Server Error' });
+            reply.status(error.message.includes('Redis') ? 503 : 500)
+                .send({ error: error.message.includes('Redis') ? 
+                    'Cache Service Unavailable' : 'Internal Server Error' });
         }
     });
 

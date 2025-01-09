@@ -1,3 +1,5 @@
+// Cache functions for games and gameweeks
+
 const DAY_IN_MS = 24 * 60 * 60 * 1000; // cache duration in milliseconds
 
 // Set cached data

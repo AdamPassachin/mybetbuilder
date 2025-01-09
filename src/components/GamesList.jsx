@@ -11,6 +11,7 @@ function GamesList({ onGameItemClick, currentGameweek }) {
     // State to store current games
     const [currentGames, setCurrentGames] = useState([]);
 
+
     // Fetch current fixtures for current gameweek
     useEffect(() => {
       const fetchGames = async () => {

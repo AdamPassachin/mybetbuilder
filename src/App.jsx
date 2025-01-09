@@ -75,10 +75,12 @@ function App() {
     const fetchGameweek = async () => {
       const cachedGameweek = getCachedData('gameweek');
       if (cachedGameweek) {
+        console.log('🌐 Browser Cache HIT - Using locally cached gameweek:', cachedGameweek);
         setCurrentGameweek(parseInt(cachedGameweek))
         return;
       }
-
+      
+      console.log('🌐 Browser Cache MISS - Fetching from server...');
       try {
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/gameweek`);
         if (!response.ok) {
@@ -86,11 +88,13 @@ function App() {
         }
         const data = await response.json();
         if (data.response && data.response.length > 0) {
-          setCurrentGameweek(parseInt(data.response[0].split('-')[1].trim()));
-          setCachedData('gameweek', data.response[0].split('-')[1].trim());
+          const gameweek = data.response[0].split('-')[1].trim();
+          console.log('✅ Server response received - Caching gameweek:', gameweek);
+          setCurrentGameweek(parseInt(gameweek));
+          setCachedData('gameweek', gameweek);
         }
       } catch (error) {
-        console.error('Error fetching current gameweek:', error);
+        console.error('❌ Error fetching current gameweek:', error);
       }
     };
 

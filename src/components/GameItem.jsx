@@ -12,12 +12,6 @@ function GameItem({ game }) {
             <div className={`flex items-center justify-center h-10 w-10 mr-2 ${gameStatus === "1H" || gameStatus === "2H" || gameStatus === "HT" ? 'bg-green-500' : ''}`}>
                 {gameStatus === "FT" ? "FT" : gameStatus === "PST" ? "PST" : gameStatus === "1H" || gameStatus === "2H" || gameStatus === "HT" ? "Live" : convertTime(game.fixture.date)}
             </div>
-            {(gameStatus === "FT") && (
-                <div className='flex flex-col items-center justify-center mr-2 w-12 h-full bg-gray-300 p-0.5'>
-                    <div className='text-center'>{game.score.fulltime.home}</div>
-                    <div className='text-center'>{game.score.fulltime.away}</div>
-                </div>
-            )}
             <div className="flex flex-col flex-grow">
                 <div className="flex items-center">
                     <img src={game.teams.home.logo} alt={game.teams.home.name} className="w-5 h-5 mr-2" />
