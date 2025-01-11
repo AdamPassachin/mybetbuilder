@@ -21,8 +21,6 @@ function BetBuilder({ game, gameweek, selectedOdds, setSelectedOdds, setBetslipV
     // Constant to store team names
     const homeTeam = game.teams.home.name;
     const awayTeam = game.teams.away.name;
-    // Constant to store game status
-    const gameStatus = game.fixture.status.short;
     // Constant to store fixture id
     const fixture_id = game.fixture.id;
     // State to store available markets
@@ -100,7 +98,7 @@ function BetBuilder({ game, gameweek, selectedOdds, setSelectedOdds, setBetslipV
                     </div>
                     <div className='flex flex-col items-center mx-20'>
                         <span className='text-xl'>
-                            {gameStatus === "FT" ? "FT" :  gameStatus === "1H" || gameStatus === "2H" || gameStatus === "HT"  ? "Live": convertTime(game.fixture.date)}
+                            {convertTime(game.fixture.date)}
                         </span>
                         <span className='text-sm text-gray-600'>
                             {convertDateHeader(game.fixture.date)}

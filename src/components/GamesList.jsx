@@ -19,24 +19,15 @@ function GamesList({ onGameItemClick, currentGameweek }) {
         try {
           // Check cache first
           const cachedGames = getCachedData(`games-${currentGameweek}`);
-          const cachedStatus = getCachedData(`status-${currentGameweek}`);
 
-          // If games cache is valid, use it initially to show something to the user
+          // If games cache is valid, use it
           if (cachedGames) {
-            const initialGames = cachedStatus 
-              ? cachedGames.map(game => ({
-                  ...game,
-                  fixture: { ...game.fixture, status: cachedStatus[game.fixture.id] }
-                }))
-              : cachedGames;
-            setCurrentGames(initialGames);
-
-            // If status is also valid, we can skip the API call
-            if (cachedStatus) {
-              return;
-            }
+            console.log('🎯 Browser Cache HIT: Games data retrieved from cache');
+            setCurrentGames(cachedGames);
+            return;
           }
 
+          console.log('❌ Browser Cache MISS: Fetching games data from API');
           // Make API call for fresh data
           const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/games?gameweek=${currentGameweek}`);
           if (!response.ok) {
@@ -49,26 +40,9 @@ function GamesList({ onGameItemClick, currentGameweek }) {
               new Date(a.fixture.date) - new Date(b.fixture.date)
             );
 
-            // Always cache the status as it's the most frequently changing part
-            const statusData = Object.fromEntries(
-              sortedGames.map(game => [game.fixture.id, game.fixture.status])
-            );
-            setCachedData(`status-${currentGameweek}`, statusData);
-
-            // Only cache games if we don't have a valid games cache
-            if (!cachedGames) {
-              setCachedData(`games-${currentGameweek}`, sortedGames);
-            }
-            
-            // If we had cached games, only update the status
-            const finalGames = cachedGames 
-              ? cachedGames.map(game => ({
-                  ...game,
-                  fixture: { ...game.fixture, status: statusData[game.fixture.id] }
-                }))
-              : sortedGames;
-            
-            setCurrentGames(finalGames);
+            // Cache the sorted games
+            setCachedData(`games-${currentGameweek}`, sortedGames);
+            setCurrentGames(sortedGames);
           }
         } catch (error) {
           console.error('Error fetching current games:', error);
