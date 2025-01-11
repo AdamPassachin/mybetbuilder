@@ -22,7 +22,10 @@ redis.on('reconnecting', () => console.log('Redis Client Reconnecting'));
 
 // Constants
 const GAMEWEEK_CACHE_KEY = 'gameweek';
-const CACHE_DURATION = 24 * 60 * 60 * 1000; // 1 day in ms
+const GAMES_CACHE_KEY_PREFIX = 'games:';
+const STATUS_CACHE_KEY_PREFIX = 'status:';
+const CACHE_DURATION = 24 * 60 * 60; // 24 hours for game data
+const STATUS_CACHE_DURATION = 10 * 60; // 10 minutes for status data
 
 // Routes for the games
 export default async function gamesRoutes(fastify, opts) {
@@ -74,7 +77,7 @@ export default async function gamesRoutes(fastify, opts) {
         }
     });
 
-    // Route to get the games for the current  gameweek
+    // Route to get the games for the current gameweek
     fastify.get('/games', async (request, reply) => {
         try {
             const gameweek = request.query.gameweek;
@@ -82,6 +85,56 @@ export default async function gamesRoutes(fastify, opts) {
                 reply.code(400).send({ error: 'Gameweek is required' });
                 return;
             }
+
+            // Ensure Redis is connected
+            if (!redis.isReady) {
+                throw new Error('Redis connection is not ready');
+            }
+
+            // Use separate cache keys for games and status
+            const gamesCacheKey = `${GAMES_CACHE_KEY_PREFIX}${gameweek}`;
+            const statusCacheKey = `${STATUS_CACHE_KEY_PREFIX}${gameweek}`;
+
+            // Get both cached data
+            const [cachedGames, cachedStatus] = await Promise.all([
+                redis.get(gamesCacheKey).catch(err => {
+                    console.error('Redis get games error:', err);
+                    return null;
+                }),
+                redis.get(statusCacheKey).catch(err => {
+                    console.error('Redis get status error:', err);
+                    return null;
+                })
+            ]);
+
+            let games = cachedGames ? JSON.parse(cachedGames) : null;
+            let status = cachedStatus ? JSON.parse(cachedStatus) : null;
+
+            // Add cache hit/miss logging
+            console.log(`Cache status for gameweek ${gameweek}:`, {
+                gamesCache: games ? 'HIT' : 'MISS',
+                statusCache: status ? 'HIT' : 'MISS'
+            });
+
+            // If we have both cached data and status, merge and return
+            if (games && status) {
+                console.log('Serving response from cache');
+                const mergedData = {
+                    ...games,
+                    response: games.response.map(game => ({
+                        ...game,
+                        fixture: { ...game.fixture, status: status[game.fixture.id] }
+                    }))
+                };
+                return mergedData;
+            }
+
+            // Fetch fresh data from API
+            console.log('Fetching fresh data from API');
+            if (!process.env.RAPIDAPI_KEY) {
+                throw new Error('RAPIDAPI_KEY is not set in the environment');
+            }
+
             const response = await fetch(`https://api-football-v1.p.rapidapi.com/v3/fixtures?league=39&season=2024&round=Regular%20Season%20-%20${gameweek}`, {
                 headers: {
                     'x-rapidapi-key': process.env.RAPIDAPI_KEY,
@@ -94,6 +147,26 @@ export default async function gamesRoutes(fastify, opts) {
             }
 
             const data = await response.json();
+
+            // Extract and cache status separately
+            if (data.response && data.response.length > 0) {
+                const statusData = Object.fromEntries(
+                    data.response.map(game => [game.fixture.id, game.fixture.status])
+                );
+
+                // Cache status with shorter duration
+                await redis.set(statusCacheKey, JSON.stringify(statusData), { 
+                    EX: STATUS_CACHE_DURATION 
+                }).catch(err => console.error('Redis set status error:', err));
+
+                // Cache full game data with longer duration
+                if (!cachedGames) {
+                    await redis.set(gamesCacheKey, JSON.stringify(data), { 
+                        EX: CACHE_DURATION 
+                    }).catch(err => console.error('Redis set games error:', err));
+                }
+            }
+
             return data;
         } catch (error) {
             console.error('Error fetching game data:', error);

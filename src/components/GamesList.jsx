@@ -21,6 +21,10 @@ function GamesList({ onGameItemClick, currentGameweek }) {
           const cachedGames = getCachedData(`games-${currentGameweek}`);
           const cachedStatus = getCachedData(`status-${currentGameweek}`);
 
+          // Add logging for cache hits/misses
+          console.log(`Games cache ${cachedGames ? 'HIT' : 'MISS'} for gameweek ${currentGameweek}`);
+          console.log(`Status cache ${cachedStatus ? 'HIT' : 'MISS'} for gameweek ${currentGameweek}`);
+
           // If games cache is valid, use it initially to show something to the user
           if (cachedGames) {
             const initialGames = cachedStatus 
@@ -33,9 +37,12 @@ function GamesList({ onGameItemClick, currentGameweek }) {
 
             // If status is also valid, we can skip the API call
             if (cachedStatus) {
+              console.log('Using fully cached data - skipping API call');
               return;
             }
-            // Otherwise, continue to API call to at least update status
+            console.log('Games cached but status outdated - making API call for fresh status');
+          } else {
+            console.log('No cached data - making full API call');
           }
 
           // Make API call for fresh data
