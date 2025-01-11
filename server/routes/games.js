@@ -110,15 +110,8 @@ export default async function gamesRoutes(fastify, opts) {
             let games = cachedGames ? JSON.parse(cachedGames) : null;
             let status = cachedStatus ? JSON.parse(cachedStatus) : null;
 
-            // Add cache hit/miss logging
-            console.log(`Cache status for gameweek ${gameweek}:`, {
-                gamesCache: games ? 'HIT' : 'MISS',
-                statusCache: status ? 'HIT' : 'MISS'
-            });
-
             // If we have both cached data and status, merge and return
             if (games && status) {
-                console.log('Serving response from cache');
                 const mergedData = {
                     ...games,
                     response: games.response.map(game => ({
@@ -129,8 +122,6 @@ export default async function gamesRoutes(fastify, opts) {
                 return mergedData;
             }
 
-            // Fetch fresh data from API
-            console.log('Fetching fresh data from API');
             if (!process.env.RAPIDAPI_KEY) {
                 throw new Error('RAPIDAPI_KEY is not set in the environment');
             }
