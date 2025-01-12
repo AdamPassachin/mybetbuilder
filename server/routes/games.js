@@ -1,25 +1,3 @@
-import { createClient } from 'redis';
-
-
-// Create a Redis client
-const redis = createClient({
-    url: process.env.REDIS_URL || 'redis://localhost:6379'
-});
-
-// Add Redis error handling
-redis.on('error', err => console.error('Redis Client Error:', err));
-redis.on('connect', () => console.log('Redis Client Connected'));
-redis.on('reconnecting', () => console.log('Redis Client Reconnecting'));
-
-// Connect with error handling
-(async () => {
-    try {
-        await redis.connect();
-    } catch (err) {
-        console.error('Redis Connection Error:', err);
-    }
-})();
-
 // Constants
 const GAMEWEEK_CACHE_KEY = 'gameweek';
 const GAMES_CACHE_KEY_PREFIX = 'games:';
@@ -31,12 +9,12 @@ export default async function gamesRoutes(fastify, opts) {
     fastify.get('/gameweek', async (request, reply) => {
         try {
             // Ensure Redis is connected
-            if (!redis.isReady) {
+            if (!fastify.redis.isReady) {
                 throw new Error('Redis connection is not ready');
             }
 
             // Check if the gameweek is cached
-            const cachedGameweek = await redis.get(GAMEWEEK_CACHE_KEY)
+            const cachedGameweek = await fastify.redis.get(GAMEWEEK_CACHE_KEY)
                 .catch(err => {
                     console.error('Redis get error:', err);
                     return null;
@@ -63,7 +41,7 @@ export default async function gamesRoutes(fastify, opts) {
             const data = await response.json();
 
             // Cache the gameweek data
-            await redis.set(GAMEWEEK_CACHE_KEY, JSON.stringify(data), { EX: CACHE_DURATION })
+            await fastify.redis.set(GAMEWEEK_CACHE_KEY, JSON.stringify(data), { EX: CACHE_DURATION })
                 .catch(err => console.error('Redis set error:', err));
 
             return data;
@@ -85,7 +63,7 @@ export default async function gamesRoutes(fastify, opts) {
             }
 
             // Ensure Redis is connected
-            if (!redis.isReady) {
+            if (!fastify.redis.isReady) {
                 throw new Error('Redis connection is not ready');
             }
 
@@ -93,7 +71,7 @@ export default async function gamesRoutes(fastify, opts) {
             const gamesCacheKey = `${GAMES_CACHE_KEY_PREFIX}${gameweek}`;
 
             // Get cached games
-            const cachedGames = await redis.get(gamesCacheKey).catch(err => {
+            const cachedGames = await fastify.redis.get(gamesCacheKey).catch(err => {
                 console.error('Redis get games error:', err);
                 return null;
             });
@@ -121,7 +99,7 @@ export default async function gamesRoutes(fastify, opts) {
 
             // Cache the game data
             if (data.response && data.response.length > 0) {
-                await redis.set(gamesCacheKey, JSON.stringify(data), { 
+                await fastify.redis.set(gamesCacheKey, JSON.stringify(data), { 
                     EX: CACHE_DURATION 
                 }).catch(err => console.error('Redis set games error:', err));
             }
