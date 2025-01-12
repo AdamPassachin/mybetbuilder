@@ -4,6 +4,7 @@ import { formatOdds, formatCurrency, replaceTeamNames } from '../utils/formatter
 import { useState, useEffect } from 'react';
 import { handleBookmakerSelect, handleRemoveBet } from '../utils/betHandlers';
 import { findHighestOdds } from '../utils/oddsUtils';
+import { data } from 'autoprefixer';
 
 
 const Betslip = ({ selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersList, oddsFormat }) => {
@@ -25,11 +26,11 @@ const Betslip = ({ selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersL
 
     // Detect user's currency from IP
     useEffect(() => {
-        fetch('https://ipapi.co/currency/')
-            .then(response => response.text())
-            .then(currency => {
+        fetch(`${import.meta.env.VITE_API_BASE_URL}/currency`)
+            .then(response => response.json())
+            .then(data => {
                 // Validate that the currency is a 3-letter code
-                const validCurrency = /^[A-Z]{3}$/.test(currency) ? currency : 'USD';
+                const validCurrency = /^[A-Z]{3}$/.test(data.currency) ? data.currency : 'USD';
                 setUserCurrency(validCurrency);
             })
             .catch(() => {

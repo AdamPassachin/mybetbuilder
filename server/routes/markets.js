@@ -1,3 +1,4 @@
+// Constants
 const THREE_HOURS = 3 * 60 * 60;
 const FIVE_MINUTES = 5 * 60;
 
