@@ -17,7 +17,7 @@ function MarketAccordion({ market, homeTeam, awayTeam, selectedOdds, setSelected
                             <th className="p-1 text-sm w-3/4 border-b border-gray-200">
                                 <div className="flex items-center gap-2">
                                     <span className="text-xs text-gray-500">Best odds</span>
-                                    <div className="w-6 h-4 border border-black rounded relative">
+                                    <div className="w-10 h-4 border-2 border-black rounded relative">
                                         <img src={crown} alt="Crown" className="absolute w-2 h-2 top-0 left-0" />
                                     </div>
                                 </div>

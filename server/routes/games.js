@@ -43,11 +43,9 @@ export default async function gamesRoutes(fastify, opts) {
                 });
 
             if (cachedGameweek) {
-                console.log('🎯 Cache HIT: Gameweek data retrieved from cache');
                 return JSON.parse(cachedGameweek);
             }
             
-            console.log('❌ Cache MISS: Fetching gameweek data from API');
             if (!process.env.RAPIDAPI_KEY) {
                 throw new Error('RAPIDAPI_KEY is not set in the environment');
             }
@@ -101,11 +99,9 @@ export default async function gamesRoutes(fastify, opts) {
             });
 
             if (cachedGames) {
-                console.log('🎯 Cache HIT: Games data retrieved from cache');
                 return JSON.parse(cachedGames);
             }
 
-            console.log('❌ Cache MISS: Fetching games data from API');
             if (!process.env.RAPIDAPI_KEY) {
                 throw new Error('RAPIDAPI_KEY is not set in the environment');
             }

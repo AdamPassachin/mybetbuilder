@@ -17,18 +17,12 @@ function GamesList({ onGameItemClick, currentGameweek }) {
     useEffect(() => {
       const fetchGames = async () => {
         try {
-          // Check cache first
           const cachedGames = getCachedData(`games-${currentGameweek}`);
-
-          // If games cache is valid, use it
           if (cachedGames) {
-            console.log('🎯 Browser Cache HIT: Games data retrieved from cache');
             setCurrentGames(cachedGames);
             return;
           }
 
-          console.log('❌ Browser Cache MISS: Fetching games data from API');
-          // Make API call for fresh data
           const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/games?gameweek=${currentGameweek}`);
           if (!response.ok) {
             throw new Error('Failed to fetch games');

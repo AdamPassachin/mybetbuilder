@@ -14,6 +14,7 @@ function App() {
 
      // Bookmaker list
      const bookmakersList = [
+      "Bwin",
       "NordicBet",
       "10Bet",
       "William Hill",
@@ -75,12 +76,10 @@ function App() {
     const fetchGameweek = async () => {
       const cachedGameweek = getCachedData('gameweek');
       if (cachedGameweek) {
-        console.log('🎯 Browser Cache HIT: Gameweek data retrieved from cache');
         setCurrentGameweek(parseInt(cachedGameweek))
         return;
       }
       
-      console.log('❌ Browser Cache MISS: Fetching gameweek data from API');
       try {
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/gameweek`);
         if (!response.ok) {

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import MarketAccordion from './MarketAccordion';
 import { groupBetsByType } from '../utils/betHandlers';
 import { convertTime, convertDateHeader, replaceTeamNames } from '../utils/formatter';
+import { getCachedData, setCachedData } from '../utils/cache';
 import { 
     MARKET_CATEGORIES, 
     POPULAR_MARKETS, 
@@ -13,6 +14,7 @@ import {
     GOALS_MARKETS,
     OTHER_MARKETS
 } from '../constants/marketCategories';
+
 
 
 // Betbuilder that showcases bookmakers and their odds for specific fixture
@@ -58,21 +60,33 @@ function BetBuilder({ game, gameweek, selectedOdds, setSelectedOdds, setBetslipV
     // Fetch available markets and odds for the selected fixture
      useEffect(() => {
         const fetchMarkets = async () => {
-          try {
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/markets?fixture_id=${fixture_id}`);
-            if (!response.ok) {
-              throw new Error('Failed to fetch markets');
+            try {
+                const cacheKey = `markets_${fixture_id}`;
+                const gameTime = new Date(game.fixture.date).getTime();
+                
+                // Try to get cached data with game time awareness
+                const cachedMarkets = getCachedData(cacheKey, gameTime);
+                if (cachedMarkets) {
+                    setMarkets(cachedMarkets);
+                    return;
+                }
+
+                // Fetch new data if no cache or invalid
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/markets?fixture_id=${fixture_id}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch markets');
+                }
+                const data = await response.json();
+                if (data.response && data.response.length > 0) {
+                    setMarkets(data.response);
+                    setCachedData(cacheKey, data.response);
+                }
+            } catch (error) {
+                console.error('Error fetching markets:', error);
             }
-            const data = await response.json();
-            if (data.response && data.response.length > 0) {
-              setMarkets(data.response);
-            }
-          } catch (error) {
-            console.error('Error fetching markets:', error);
-          }
         };
         fetchMarkets();
-      }, [fixture_id]);
+    }, [fixture_id, game.fixture.date]);
 
 
     return (
