@@ -4,7 +4,7 @@ import { formatOdds, formatCurrency, replaceTeamNames } from '../utils/formatter
 import { useState, useEffect } from 'react';
 import { handleBookmakerSelect, handleRemoveBet } from '../utils/betHandlers';
 import { findHighestOdds } from '../utils/oddsUtils';
-import { data } from 'autoprefixer';
+import { getCachedData, setCachedData } from '../utils/cache';
 
 
 const Betslip = ({ selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersList, oddsFormat }) => {
@@ -26,16 +26,24 @@ const Betslip = ({ selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersL
 
     // Detect user's currency from IP
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_API_BASE_URL}/currency`)
-            .then(response => response.json())
-            .then(data => {
-                // Validate that the currency is a 3-letter code
-                const validCurrency = /^[A-Z]{3}$/.test(data.currency) ? data.currency : 'USD';
+        const fetchCurrency = async () => {
+            try { 
+                const cachedCurrency = getCachedData('currency');
+                if (cachedCurrency) {
+                    setUserCurrency(cachedCurrency);
+                    return;
+                }
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/currency`)
+                const data = await response.text()
+                const validCurrency = /^[A-Z]{3}$/.test(data) ? data : 'USD';
+
+                setCachedData('currency', validCurrency, true);
                 setUserCurrency(validCurrency);
-            })
-            .catch(() => {
+            } catch (error) {
                 setUserCurrency('USD');
-            });
+            }
+        };
+        fetchCurrency();
     }, []);
 
 
@@ -136,7 +144,7 @@ const Betslip = ({ selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersL
                                                         <div className="text-xs text-red-500 mt-1">
                                                             Can not combine bets from the same market
                                                         </div>
-                                                    )}
+                                                    )} 
                                                 </td>
                                                 {bookmakersList.map((bookmaker) => {
                                                     const oddValue = betType.find((odd) => odd.bookmakerName === bookmaker);

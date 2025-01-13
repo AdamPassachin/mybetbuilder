@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 import { createClient } from 'redis'
 import gamesRoutes from './routes/games.js'
 import marketsRoutes from './routes/markets.js'
+import currencyRoutes from './routes/currency.js'
 
 // Create the Fastify instance
 const fastify = Fastify({
@@ -39,6 +40,7 @@ const start = async () => {
         // Register routes after Redis is connected
         await fastify.register(gamesRoutes)
         await fastify.register(marketsRoutes)
+        await fastify.register(currencyRoutes)
 
         await fastify.listen({ port: 3000 });
     } catch (err) {

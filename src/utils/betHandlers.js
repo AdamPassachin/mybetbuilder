@@ -1,8 +1,9 @@
 // Adds a bet to the betslip
 export const handleOddClick = ({ value, selectedOdds, market, homeTeam, awayTeam, setSelectedOdds, setBetslipVisible }) => {
-    // Check if any existing bet is from the same market
+    // Check if any existing bet is from the same market AND same fixture
     const sameMarketExists = selectedOdds.some(betGroup => 
-        betGroup[0].market === market[0]?.name
+        betGroup[0].market === market[0]?.name && 
+        betGroup[0].fixture === `${homeTeam} vs ${awayTeam}`
     );
     
     const oddsForValue = market.flatMap(bookmaker => 
@@ -19,7 +20,9 @@ export const handleOddClick = ({ value, selectedOdds, market, homeTeam, awayTeam
 
     if (sameMarketExists) {
         const updatedOdds = selectedOdds.map(betGroup => {
-            if (betGroup[0].market === market[0]?.name) {
+            // Only mark as error if it's the same market AND same fixture
+            if (betGroup[0].market === market[0]?.name && 
+                betGroup[0].fixture === `${homeTeam} vs ${awayTeam}`) {
                 return betGroup.map(bet => ({ ...bet, error: true }));
             }
             return betGroup;
@@ -104,3 +107,5 @@ export const replaceTeamNames = (value, homeTeam, awayTeam) => {
     }
     return value;
 };
+
+
