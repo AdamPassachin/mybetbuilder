@@ -8,6 +8,7 @@ import FAQ from './components/FAQ'
 import Footer from './components/Footer'
 import chevronLeft from './assets/icons/chevron-left.svg'
 import { setCachedData, getCachedData } from './utils/cache'
+import LeagueSelector from './components/LeagueSelector'
 
 
 function App() {
@@ -26,6 +27,15 @@ function App() {
       "Betano",
       "Betway"
   ];
+
+  // Leagues list
+  const leagues = {
+    'Premier League': 39,
+    'La Liga': 140,
+    'Serie A': 135,
+    'Ligue 1': 61,
+    'Bundesliga': 78
+  }
 
   // State to control the visibility of the betbuilder 
   const [showBetBuilder, setShowBetBuilder] = useState(false);
@@ -51,6 +61,8 @@ function App() {
   // State to store odds format
   const [oddsFormat, setOddsFormat] = useState('decimal');
 
+  // Add new state for selected league
+  const [selectedLeague, setSelectedLeague] = useState(39); // Default to Premier League
 
   // Add list of features
   const features = [
@@ -116,10 +128,22 @@ function App() {
         oddsFormat={oddsFormat}
         setOddsFormat={setOddsFormat}
       />
-      {/* Main content for GamesList */}
-      <div className='w-screen flex justify-center'>
+      
+      <div className="w-screen flex flex-col items-center">
+        {/* League Selector */}
+        <div className="w-screen flex justify-center mt-32 h-[60px]">
+          {!showBetBuilder && currentGameweek && (
+            <LeagueSelector
+              leagues={leagues}
+              selectedLeague={selectedLeague}
+              setSelectedLeague={setSelectedLeague}
+            />
+          )}
+        </div>
+
+        {/* Main content for GamesList/BetBuilder */}
         <div className='w-[80vw] flex flex-col'>
-          <div className='p-4 my-40 border-none bg-gray-200 rounded-md min-h-[600px] shadow-md'>
+          <div className='p-4 my-8 border-none bg-gray-200 rounded-md min-h-[600px] shadow-md'>
             {showBetBuilder && (
               <button className='flex justify-center items-center border-none bg-transparent w-9 h-9 hover:bg-gray-300' onClick={() => setShowBetBuilder(false)}>
                 <img className='w-5 h-5' src={chevronLeft} alt='Return' />
@@ -128,16 +152,13 @@ function App() {
             {!showBetBuilder && (
               <>
                 {currentGameweek ? (
-                  <>
-                    {/* GamesList */}
-                    <GamesList 
-                      currentGameweek={currentGameweek} 
-                      onGameItemClick={(game) => {
-                        setShowBetBuilder(true);
-                        setSelectedGame(game);
-                      }} 
-                    />    
-                  </>
+                  <GamesList 
+                    currentGameweek={currentGameweek}
+                    onGameItemClick={(game) => {
+                      setShowBetBuilder(true);
+                      setSelectedGame(game);
+                    }} 
+                  />    
                 ) : (
                   <div className="flex justify-center items-center h-full">
                     <span className="loading loading-spinner loading-lg"></span>
