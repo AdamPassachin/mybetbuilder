@@ -7,7 +7,7 @@ import { getCachedData, setCachedData } from '../utils/cache';
 
 
 // GamesList component for the games list. We make api call here and pass the data to the Game component. Create row for each game.
-function GamesList({ onGameItemClick, currentGameweek }) {
+function GamesList({ onGameItemClick, currentGameweek, selectedLeague }) {
 
     // State to store current games
     const [currentGames, setCurrentGames] = useState([]);
@@ -17,13 +17,13 @@ function GamesList({ onGameItemClick, currentGameweek }) {
     useEffect(() => {
       const fetchGames = async () => {
         try {
-          const cachedGames = getCachedData(`games-${currentGameweek}`);
+          const cachedGames = getCachedData(`games-${selectedLeague}-${currentGameweek}`);
           if (cachedGames) {
             setCurrentGames(cachedGames);
             return;
           }
 
-          const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/games?gameweek=${currentGameweek}`);
+          const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/games?gameweek=${currentGameweek}&leagueId=${selectedLeague}`);
           if (!response.ok) {
             throw new Error('Failed to fetch games');
           }
@@ -35,7 +35,7 @@ function GamesList({ onGameItemClick, currentGameweek }) {
             );
 
             // Cache the sorted games
-            setCachedData(`games-${currentGameweek}`, sortedGames);
+            setCachedData(`games-${selectedLeague}-${currentGameweek}`, sortedGames);
             setCurrentGames(sortedGames);
           }
         } catch (error) {

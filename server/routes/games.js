@@ -69,8 +69,9 @@ export default async function gamesRoutes(fastify, opts) {
     fastify.get('/games', async (request, reply) => {
         try {
             const gameweek = request.query.gameweek;
-            if (!gameweek) {
-                reply.code(400).send({ error: 'Gameweek is required' });
+            const leagueId = request.query.leagueId;
+            if (!gameweek || !leagueId) {
+                reply.code(400).send({ error: 'Gameweek and leagueId are required' });
                 return;
             }
 
@@ -80,7 +81,7 @@ export default async function gamesRoutes(fastify, opts) {
             }
 
             // Cache key for games only
-            const gamesCacheKey = `${GAMES_CACHE_KEY_PREFIX}${gameweek}`;
+            const gamesCacheKey = `${GAMES_CACHE_KEY_PREFIX}${leagueId}-${gameweek}`;
 
             // Get cached games
             const cachedGames = await fastify.redis.get(gamesCacheKey).catch(err => {
@@ -96,7 +97,7 @@ export default async function gamesRoutes(fastify, opts) {
                 throw new Error('RAPIDAPI_KEY is not set in the environment');
             }
 
-            const response = await fetch(`https://api-football-v1.p.rapidapi.com/v3/fixtures?league=39&season=2024&round=Regular%20Season%20-%20${gameweek}`, {
+            const response = await fetch(`https://api-football-v1.p.rapidapi.com/v3/fixtures?league=${leagueId}&season=2024&round=Regular%20Season%20-%20${gameweek}`, {
                 headers: {
                     'x-rapidapi-key': process.env.RAPIDAPI_KEY,
                     'x-rapidapi-host': process.env.RAPIDAPI_HOST

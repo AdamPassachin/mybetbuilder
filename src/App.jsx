@@ -152,6 +152,7 @@ function App() {
                 {currentGameweek ? (
                   <GamesList 
                     currentGameweek={currentGameweek}
+                    selectedLeague={selectedLeague}
                     onGameItemClick={(game) => {
                       setShowBetBuilder(true);
                       setSelectedGame(game);
@@ -168,7 +169,7 @@ function App() {
             {showBetBuilder && 
               <BetBuilder 
                 game={selectedGame}
-                gameweek={currentGameweek}
+                currentGameweek={currentGameweek}
                 selectedOdds={selectedOdds}
                 setSelectedOdds={setSelectedOdds}
                 betslipVisible={betslipVisible}

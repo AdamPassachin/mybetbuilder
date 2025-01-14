@@ -18,7 +18,7 @@ import {
 
 
 // Betbuilder that showcases bookmakers and their odds for specific fixture
-function BetBuilder({ game, gameweek, selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersList, oddsFormat }) {
+function BetBuilder({ game, currentGameweek, selectedOdds, setSelectedOdds, setBetslipVisible, bookmakersList, oddsFormat }) {
 
     // Constant to store team names
     const homeTeam = game.teams.home.name;
@@ -100,7 +100,7 @@ function BetBuilder({ game, gameweek, selectedOdds, setSelectedOdds, setBetslipV
                                 src={game.league.flag} 
                                 alt={`${game.league.name} logo`} 
                             />
-                            <p>{game.league.name} - Gameweek {gameweek || 'N/A'}</p>
+                            <p>{game.league.name} - Gameweek {currentGameweek || 'N/A'}</p>
                         </div>
                         <p>Venue: {game.fixture.venue.name || 'N/A'}</p>
                         <p>Referee: {game.fixture.referee || 'N/A'}</p>
