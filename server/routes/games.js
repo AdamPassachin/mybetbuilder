@@ -1,5 +1,5 @@
 // Constants
-const GAMEWEEK_CACHE_KEY = 'gameweek';
+const GAMEWEEK_CACHE_KEY = 'gameweek:';
 const GAMES_CACHE_KEY_PREFIX = 'games:';
 const CACHE_DURATION = 24 * 60 * 60; // 24 hours for game data
 
@@ -8,30 +8,42 @@ export default async function gamesRoutes(fastify, opts) {
     // GET Route to get the current gameweek
     fastify.get('/gameweek', async (request, reply) => {
         try {
+
+            // Get league ID from request
+            const leagueId = request.query.leagueId;
+            if (!leagueId) {
+                reply.code(400).send({ error: 'League is required' });
+                return;
+            }
+
             // Ensure Redis is connected
             if (!fastify.redis.isReady) {
                 throw new Error('Redis connection is not ready');
             }
 
+            // Cache key to include league ID
+            const cacheKey = `${GAMEWEEK_CACHE_KEY}${leagueId}`;
+            
             // Check if the gameweek is cached
-            const cachedGameweek = await fastify.redis.get(GAMEWEEK_CACHE_KEY)
+            const cachedGameweek = await fastify.redis.get(cacheKey)
                 .catch(err => {
                     console.error('Redis get error:', err);
                     return null;
                 });
-
             if (cachedGameweek) {
                 return JSON.parse(cachedGameweek);
             }
             
+            //Check if RAPIDAPI_KEY is set
             if (!process.env.RAPIDAPI_KEY) {
                 throw new Error('RAPIDAPI_KEY is not set in the environment');
             }
-
-            const response = await fetch('https://api-football-v1.p.rapidapi.com/v3/fixtures/rounds?league=39&season=2024&current=true', {
+            
+            // Fetch gameweek data from API
+            const response = await fetch(`https://api-football-v1.p.rapidapi.com/v3/fixtures/rounds?league=${leagueId}&season=2024&current=true`, {
                 headers: {
                     'x-rapidapi-key': process.env.RAPIDAPI_KEY,
-                    'x-rapidapi-host': process.env.RAPIDAPI_HOST
+                    'x-rapidapi-host': process.env.RAPIDAPI_HOST    
                 }
             });
 
@@ -40,8 +52,8 @@ export default async function gamesRoutes(fastify, opts) {
             }
             const data = await response.json();
 
-            // Cache the gameweek data
-            await fastify.redis.set(GAMEWEEK_CACHE_KEY, JSON.stringify(data), { EX: CACHE_DURATION })
+            // Update cache with league-specific key
+            await fastify.redis.set(cacheKey, JSON.stringify(data), { EX: CACHE_DURATION })
                 .catch(err => console.error('Redis set error:', err));
 
             return data;

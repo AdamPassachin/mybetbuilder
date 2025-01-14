@@ -1,6 +1,7 @@
 import React from 'react';
 
 function LeagueSelector({ leagues, selectedLeague, setSelectedLeague }) {
+
   return (
     <div className="flex justify-center gap-6 mb-8">
       {Object.entries(leagues).map(([leagueName, leagueId]) => (

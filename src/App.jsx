@@ -86,23 +86,21 @@ function App() {
   // Fetch current gameweek from backend
   useEffect(() => {
     const fetchGameweek = async () => {
-      const cachedGameweek = getCachedData('gameweek');
+      const cachedGameweek = getCachedData(`gameweek-${selectedLeague}`);
       if (cachedGameweek) {
         setCurrentGameweek(parseInt(cachedGameweek))
         return;
       }
-      
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/gameweek`);
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/gameweek?leagueId=${selectedLeague}`);
         if (!response.ok) {
           throw new Error('Failed to fetch current gameweek');
         }
         const data = await response.json();
         if (data.response && data.response.length > 0) {
-          const gameweek = data.response[0].split('-')[1].trim();
-         
+          const gameweek = data.response[0].split('-')[1].trim();    
           setCurrentGameweek(parseInt(gameweek));
-          setCachedData('gameweek', gameweek);
+          setCachedData(`gameweek-${selectedLeague}`, gameweek);
         }
       } catch (error) {
         console.error('❌ Error fetching current gameweek:', error);
@@ -110,7 +108,7 @@ function App() {
     };
 
     fetchGameweek();
-  }, []);
+  }, [selectedLeague]);
 
 
   return (
