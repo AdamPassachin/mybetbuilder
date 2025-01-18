@@ -34,7 +34,9 @@ function App() {
     'La Liga': 140,
     'Serie A': 135,
     'Ligue 1': 61,
-    'Bundesliga': 78
+    'Bundesliga': 78,
+    'Eredivisie': 88,
+    'Primeira Liga': 94
   }
 
   // State to control the visibility of the betbuilder 

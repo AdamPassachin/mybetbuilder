@@ -43,7 +43,7 @@ function GamesList({ onGameItemClick, currentGameweek, selectedLeague }) {
         }
       };
       fetchGames();
-    }, [currentGameweek]);
+    }, [currentGameweek, selectedLeague]);
 
     return (
         <>
@@ -62,7 +62,7 @@ function GamesList({ onGameItemClick, currentGameweek, selectedLeague }) {
             </div>
             <div className='flex justify-start'>
                 {currentGames.length > 0 && (
-                    <img src={currentGames[0].league.logo} alt='league-logo' className='h-11 w-11' />
+                    <img src={currentGames[0].league.logo} alt='league-logo' className='w-12 h-12 object-contain' />
                 )}
             </div>
             <div className='bg-white rounded-md p-4 mt-4 flex flex-col h-auto'>

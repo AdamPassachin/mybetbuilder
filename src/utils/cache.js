@@ -1,5 +1,5 @@
 // Cache functions for games and gameweeks
-const DAY_IN_MS = 24 * 60 * 60 * 1000;
+const SIX_HOURS = 6 * 60 * 60 * 1000;
 const THREE_HOURS = 3 * 60 * 60 * 1000;
 const FIVE_MINUTES = 5 * 60 * 1000;
 
@@ -38,8 +38,8 @@ export const getCachedData = (key, gameTime = null) => {
             return null;
         }
     } else {
-        // Default 24hr cache for non-game related data
-        if (now - item.timestamp > DAY_IN_MS) {
+        // Default 6hr cache for non-game related data
+        if (now - item.timestamp > SIX_HOURS) {
             localStorage.removeItem(key);
             return null;
         }

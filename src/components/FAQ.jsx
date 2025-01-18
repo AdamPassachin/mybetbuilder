@@ -24,7 +24,7 @@ function FAQ() {
         },
         {
           question: "What leagues are supported?",
-          answer: "We currently support the English Premier League, but will be adding more leagues soon."
+          answer: "We currently support the top leagues in Europe, but will be adding more leagues soon."
         },
         {
           question: "What bookmakers are supported?",

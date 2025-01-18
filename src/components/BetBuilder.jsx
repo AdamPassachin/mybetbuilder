@@ -100,7 +100,7 @@ function BetBuilder({ game, currentGameweek, selectedOdds, setSelectedOdds, setB
                                 src={game.league.flag} 
                                 alt={`${game.league.name} logo`} 
                             />
-                            <p>{game.league.name} - Gameweek {currentGameweek || 'N/A'}</p>
+                            <p>{game.league.name}{currentGameweek && ` - Gameweek ${currentGameweek}`}</p>
                         </div>
                         <p>Venue: {game.fixture.venue.name || 'N/A'}</p>
                         <p>Referee: {game.fixture.referee || 'N/A'}</p>

@@ -1,7 +1,7 @@
 // Constants
 const GAMEWEEK_CACHE_KEY = 'gameweek:';
 const GAMES_CACHE_KEY_PREFIX = 'games:';
-const CACHE_DURATION = 24 * 60 * 60; // 24 hours for game data
+const CACHE_DURATION = 6 * 60 * 60; // 6 hours for game data
 
 // Routes for the games
 export default async function gamesRoutes(fastify, opts) {
